@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'candidato/css/candidato.css' %}">
+{% endblock %}
+
+
+{% block 'dashboard' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md card-dashboard">
+                <p class="text-card">CADASTRAR</p>
+            </div>
+            <div class="col-md card-dashboard">
+                <p class="text-card">ATUALIZAR</p>
+            </div>
+        </div>
+        <div class="adicionar-cliente">
+            <form method="post" action="{% url 'candidato' %}">
+                {% csrf_token %}
+                <div class="col-md">
+                    <div class="row mb-4 mb-4">
+                    <p>Nome Completo</p>
+                    <input type="text" class="form-control" placeholder="Nome Completo" name="nome" required>
+                    </div>
+                    <div class="row mb-4">
+                    <p>CPF</p>
+                    <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" required>
+                    </div>
+                    <div class="row mb-4">
+                    <p>Data de Nascimento</p>
+                    <input type="date" class="form-control" placeholder="dd/mm/aaaa" name="data_nascimento" required>
+                    </div>
+                    <div class="row mb-4">
+                    <label for="grupoAtendimento">Selecione um Grupo de Atendimento:</label>
+                    <select class="form-control" name="grupoAtendimento" id="grupoAtendimento">
+                        {% for grupo in grupos %}
+                            <option value="{{ grupo.codigo }}">{{ grupo.nome }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="row mb-4">
+                    <p>Teve covid nos ultimos 30 dias?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="teve_covid" id="sim" value="sim">
+                        <label class="form-check-label" for="sim">
+                        Sim
+                        </label>
+                    </div>
+                
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="teve_covid" id="nao" value="nao">
+                        <label class="form-check-label" for="nao">
+                        Não
+                        </label>
+                    </div>
+                    </div>
+                    <div class="row mb-4">
+                    <p>Senha</p>
+                    <input class="form-control" type="password" id="senha" name="senha" required>
+                    </div>
+                    <div class="row mb-4">
+                    <p>Confirme a Senha:</p>
+                    <input class="form-control" type="password" id="confirmarSenha" name="confirmarSenha" required>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Cadastrar" class="btn-principal">
+                </div>
+            </form>
+            
+        </div>
+    </div>
+{% endblock %}
