@@ -1,0 +1,19 @@
+{% extends 'base_autenticado.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'candidato/css/candidato.css' %}">
+{% endblock %}
+
+{% block 'nome' %}
+    <p>{{ nome }}</p>
+{% endblock %}
+{% block 'data' %}{{ data_nascimento }}{% endblock %}
+{% block 'cpf' %}{{ cpf }}{% endblock %}
+
+
+{% block 'dashboard' %}
+    <!-- <h4>{{ nome }}</h4>
+    <h4>{{ data_nascimento }}</h4>
+    <h4>{{ cpf }}</h4> -->
+{% endblock %}

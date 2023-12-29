@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'candidato/css/candidato.css' %}">
+{% endblock %}
+
+
+{% block 'dashboard' %}
+    <div class="container mt-5">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h3 class="card-title d-flex justify-content-between custom-title">
+                    Login
+                    <img width="40" height="40" src="{% static 'img/icons8-entrar-50 (1).png' %}" alt="cadastro candidato">
+                </h5>
+                <form method="post" action="{% url 'login_candidato' %}">
+                    {% csrf_token %}
+                    {% if messages %}
+                        <ul class="messages">
+                        {% for message in messages %}
+                            <li style="color: rgb(255, 93, 93); list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                        <div class="form-group">
+                            <label>CPF</label>
+                            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input class="form-control" type="password" id="senha" name="senha" required>
+                        </div>
+                        <input class="btn custom-btn" type="submit" value="Entrar" class="btn-principal">
+                </form>
+            </div>
+        </div>        
+    </div>
+{% endblock %}

@@ -15,23 +15,28 @@
     <title>{% block 'title' %}{% endblock %}</title>
   </head>
   <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" id="logo" href="#">AGENDAMENTO</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="#">Entrar<span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="#">Cadastrar</a>
-              </li>
-          </ul>
-        </div>
-      </nav>
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item p-2">
+            {% block 'nome' %}{% endblock %}
+          </li>
+          <li class="nav-item p-2">
+            <p>{% block 'data' %}{% endblock %}</p>
+          </li>
+          <li class="nav-item p-2">
+            <p>{% block 'cpf' %}{% endblock %}</p>
+          </li>
+          <li class="nav-item p-2">
+            <p>{% block 'apto' %}{% endblock %}</p>
+          </li>
+          <li class="nav-item p-2 mb-auto">
+              <a class="nav-link logout-btn" href="{% url 'logout' %}">Encerrar Sessão<span class="sr-only">(current)</span></a>
+          </li>
+       
+        </ul>
+      </div>
+    </nav>
       
       <section class="home-section">
           {% block 'dashboard'%}

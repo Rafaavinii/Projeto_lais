@@ -1,3 +1,31 @@
-* {
-    color: var(--main-color);
+
+.custom-card {
+  position: relative;
+  border-bottom: 10px solid var(--main-color);
+  padding-bottom: 5px; 
+  color: var(--main-color);
+}
+  
+
+.custom-card::before{
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 0px;
+  right: 10px;
+  height: 35px;
+  width: 10px; 
+  background-color: var(--main-color);
+  border-radius: 0 5px 5px 0;
+}
+
+  
+  
+.custom-title{
+  color: var(--main-color);
+}
+  
+.custom-btn {
+  background-color: var(--differential-color);
+  color: var(--light-color);
 }
