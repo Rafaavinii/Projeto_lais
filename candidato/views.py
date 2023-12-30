@@ -123,6 +123,20 @@ def candidato_autenticado(request):
         page_num = request.GET.get('page')
         agendamentos_pagina = agendamentos_pagina.get_page(page_num)
         
+        #consumindo xml
+        xml_url = 'https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml'
+
+        response = requests.get(xml_url)
+
+        if response.status_code == 200:
+            root = ET.fromstring(response.content)
+            
+            estabelecimentos = []
+            for estabelecimento in root.findall('estabelecimento'):
+                codigo = estabelecimento.find('co_cnes').text
+                nome = estabelecimento.find('no_fantasia').text
+                estabelecimentos.append({'codigo': codigo, 'nome': nome})
+
         context = {
             'dados_usuario': {
                 'nome': nome,
@@ -132,6 +146,7 @@ def candidato_autenticado(request):
                 'apto': apto,
             },
             'agendamentos_pagina': agendamentos_pagina,
+            'estabelecimentos': estabelecimentos,
         }
 
 
