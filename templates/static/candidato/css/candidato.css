@@ -1,7 +1,7 @@
 
 .custom-card {
   position: relative;
-  border-bottom: 10px solid var(--main-color);
+  border-bottom: 10px solid var(--differential-color);
   padding-bottom: 5px; 
   color: var(--main-color);
 }
@@ -15,14 +15,14 @@
   right: 10px;
   height: 35px;
   width: 10px; 
-  background-color: var(--main-color);
+  background-color: var(--differential-color);
   border-radius: 0 5px 5px 0;
 }
 
   
   
 .custom-title{
-  color: var(--main-color);
+  color: var(--differential-color);
 }
   
 .custom-btn {

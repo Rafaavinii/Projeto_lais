@@ -6,14 +6,22 @@
 {% endblock %}
 
 {% block 'nome' %}
-    <p>{{ nome }}</p>
+    {{ nome }}
 {% endblock %}
-{% block 'data' %}{{ data_nascimento }}{% endblock %}
-{% block 'cpf' %}{{ cpf }}{% endblock %}
+{% block 'data' %}
+    {{ idade }} anos ({{ data_nascimento }}) 
+{% endblock %}
+{% block 'cpf' %}
+    {{ cpf }}
+{% endblock %}
+{% block 'apto' %}
+    {{ apto }}
+{% endblock %}
 
 
-{% block 'dashboard' %}
-    <!-- <h4>{{ nome }}</h4>
-    <h4>{{ data_nascimento }}</h4>
-    <h4>{{ cpf }}</h4> -->
+{% block 'dashboard'%}
+<h1 class="center">AGENDAMENTO</h1>
+<div class="container">
+    <button</button>
+</div>
 {% endblock %}

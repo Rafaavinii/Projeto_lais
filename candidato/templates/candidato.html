@@ -12,13 +12,20 @@
             <div class="card-body">
                 <h3 class="card-title d-flex justify-content-between custom-title">
                     Cadastro
-                    <img width="40" height="40" src="{% static 'img/icons8-cadastro-32.png' %}" alt="cadastro candidato">
+                    <img width="40" height="40" src="{% static 'img/icons8-cadastro-50.png' %}" alt="cadastro candidato">
                 </h5>
                 <form method="post" action="{% url 'candidato' %}">
                     {% csrf_token %}
+                    {% if messages %}
+                    <ul class="messages">
+                    {% for message in messages %}
+                        <li style="color: rgb(255, 93, 93); list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
-                            <input type="text" class="form-control" placeholder="Nome Completo" name="nome" required>
+                            <input type="text" class="form-control bg-secundary" placeholder="Nome Completo" name="nome" required>
                         </div>
                         <div class="form-group">
                             <label>CPF</label>
@@ -59,7 +66,13 @@
                             <label>Confirme a Senha:</label>
                             <input class="form-control" type="password" id="confirmarSenha" name="confirmarSenha" required>
                         </div>
-                        <input class="btn custom-btn" type="submit" value="Cadastrar" class="btn-principal">
+                        <div class="d-flex justify-content-center">
+                            <input class="btn custom-btn btn-principal btn-lg" type="submit" value="Cadastrar">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'login_candidato' %}" class="btn btn-link">Já tenho cadastro, faça login</a>
+                        </div>
+                        
                 </form>
             </div>
         </div>        

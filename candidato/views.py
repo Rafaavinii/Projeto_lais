@@ -1,9 +1,9 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 import xml.etree.ElementTree as ET
 import requests
 from .models import Candidato
@@ -52,7 +52,7 @@ def candidato(request):
 
         candidato.save()
 
-        return redirect('login_candidato.html')
+        return redirect('login_candidato')
 
 def login_candidato(request):
     if request.method == "GET":
@@ -82,11 +82,28 @@ def candidato_autenticado(request):
         nome = request.user.nome_completo
         data_nascimento = request.user.data_nascimento
         cpf = request.user.cpf
+        teve_covid = request.user.teve_covid
+        grupo_atendimento = request.user.grupo_atendimento
 
+        
+
+        # calcular idade
+        data_atual = datetime.now()
+        idade = data_atual.year - data_nascimento.year - ((data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day))
+
+        #apto?
+        grupo_nao_apto = ['População Privada de Liberdade', 'Pessoas com Deficiência Institucionalizadas', 'Pessoas ACAMADAS de 80 anos ou mais']
+        if teve_covid or idade < 18 or grupo_atendimento in grupo_nao_apto:
+            apto = 'Não'
+        else:
+            apto = 'Sim'
+        
         context = {
             'nome': nome,
             'data_nascimento': data_nascimento,
-            'cpf': cpf
+            'idade': idade,
+            'cpf': cpf,
+            'apto': apto,
         }
 
         return render(request, 'pagina_inicial.html', context)

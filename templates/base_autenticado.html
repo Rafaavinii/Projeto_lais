@@ -15,34 +15,45 @@
     <title>{% block 'title' %}{% endblock %}</title>
   </head>
   <body>
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item p-2">
-            {% block 'nome' %}{% endblock %}
-          </li>
-          <li class="nav-item p-2">
-            <p>{% block 'data' %}{% endblock %}</p>
-          </li>
-          <li class="nav-item p-2">
-            <p>{% block 'cpf' %}{% endblock %}</p>
-          </li>
-          <li class="nav-item p-2">
-            <p>{% block 'apto' %}{% endblock %}</p>
-          </li>
-          <li class="nav-item p-2 mb-auto">
-              <a class="nav-link logout-btn" href="{% url 'logout' %}">Encerrar Sessão<span class="sr-only">(current)</span></a>
-          </li>
-       
-        </ul>
-      </div>
-    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-3 pt-4 d-none d-md-block sidebar">
+          <div class="container titulo-dados-candidato">
+            <p>Dados do Candidato</p>
+          </div>
+          <div class="sidebar-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item p-2">
+                <label>Nome</label>
+                <p>{% block 'nome' %}{% endblock %}</p>
+              </li>
+              <li class="nav-item p-2">
+                <label>Idade</label>
+                <p>{% block 'data' %}{% endblock %}</p>
+              </li>
+              <li class="nav-item p-2">
+                <label>CPF</label>
+                <p>{% block 'cpf' %}{% endblock %}</p>
+              </li>
+              <li class="nav-item p-2">
+                <label>Está apto para agendamento?</label>
+                <p>{% block 'apto' %}{% endblock %}</p>
+              </li>
+              <li class="nav-item p-2 mb-auto">
+                  <a class="nav-link logout-btn" href="{% url 'logout' %}">Encerrar Sessão<span class="sr-only">(current)</span></a>
+              </li>
+          
+            </ul>
+          </div>
+        </nav>
       
-      <section class="home-section">
-          {% block 'dashboard'%}
-          {% endblock %}
+        <section class="col-md-9 pt-4 home-section">
+            {% block 'dashboard'%}
+            {% endblock %}
 
-      </section>
+        </section>
+      </div>
+    </div>
 
     {% block 'body' %}
     {% endblock %}
