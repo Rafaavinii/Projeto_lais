@@ -52,3 +52,27 @@ a.logout-btn {
 .home-section{
   color: var(--main-color);
 }
+
+.custom-btn {
+  background-color: var(--differential-color);
+  text-decoration: none; 
+  color: #ffffff;
+}
+
+.custom-card-body {
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-style: inherit;
+  text-align: center;
+  background-color: var(--differential-color);
+}
+
+.texto-principal {
+  box-shadow: 0 4px 5px -2px rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  padding-top: -5px;
+}
+
+.card-maior {
+  background-color: #ffeaf2;
+}

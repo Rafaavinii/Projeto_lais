@@ -4,12 +4,16 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import xml.etree.ElementTree as ET
 import requests
 from .models import Candidato
+from agendamento.models import Agendamento
 
 def candidato(request):
     if request.method == 'GET':
+
+        # Enviando o grupos para o select
         xml_url = 'https://selecoes.lais.huol.ufrn.br/media/grupos_atendimento.xml'
 
         response = requests.get(xml_url)
@@ -52,6 +56,8 @@ def candidato(request):
 
         candidato.save()
 
+        messages.success(request, 'Cadastro realizado com sucesso. Faça login para continuar.')
+
         return redirect('login_candidato')
 
 def login_candidato(request):
@@ -62,6 +68,7 @@ def login_candidato(request):
         cpf = request.POST.get('cpf')
         senha = request.POST.get('senha')
 
+        #autenticando candidato
         candidato = authenticate(request, cpf=cpf, password=senha)
         
         if candidato is not None:
@@ -72,6 +79,7 @@ def login_candidato(request):
             return render(request, 'login_candidato.html')
 
 def logout_view(request):
+    # logout do candidato
     logout(request)
     return redirect('pagina_inicial')
 
@@ -79,13 +87,13 @@ def logout_view(request):
 def candidato_autenticado(request):
     if request.method == "GET":
 
-        nome = request.user.nome_completo
-        data_nascimento = request.user.data_nascimento
-        cpf = request.user.cpf
-        teve_covid = request.user.teve_covid
-        grupo_atendimento = request.user.grupo_atendimento
+        usuario = request.user
 
-        
+        nome = usuario.nome_completo
+        data_nascimento = usuario.data_nascimento
+        cpf = usuario.cpf
+        teve_covid = usuario.teve_covid
+        grupo_atendimento = usuario.grupo_atendimento
 
         # calcular idade
         data_atual = datetime.now()
@@ -98,12 +106,33 @@ def candidato_autenticado(request):
         else:
             apto = 'Sim'
         
+        #filtrando agendamentos por usuario
+        agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
+
+        lista_agendamento = []
+        for agendamento in agendamentos:
+            lista_agendamento.append(agendamento.__dict__)
+        
+        # Número de agendamentos por página
+        agendamentos_por_pagina = 6
+
+        # Cria um objeto Paginator
+        agendamentos_pagina = Paginator(lista_agendamento, agendamentos_por_pagina)
+
+        # Obtém o número da página a partir dos parâmetros GET
+        page_num = request.GET.get('page')
+        agendamentos_pagina = agendamentos_pagina.get_page(page_num)
+        
         context = {
-            'nome': nome,
-            'data_nascimento': data_nascimento,
-            'idade': idade,
-            'cpf': cpf,
-            'apto': apto,
+            'dados_usuario': {
+                'nome': nome,
+                'data_nascimento': data_nascimento,
+                'idade': idade,
+                'cpf': cpf,
+                'apto': apto,
+            },
+            'agendamentos_pagina': agendamentos_pagina,
         }
+
 
         return render(request, 'pagina_inicial.html', context)

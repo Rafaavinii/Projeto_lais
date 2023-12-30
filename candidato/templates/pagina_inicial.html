@@ -6,22 +6,82 @@
 {% endblock %}
 
 {% block 'nome' %}
-    {{ nome }}
+    {{ dados_usuario.nome }}
 {% endblock %}
 {% block 'data' %}
-    {{ idade }} anos ({{ data_nascimento }}) 
+    {{ dados_usuario.idade }} anos ({{ dados_usuario.data_nascimento }}) 
 {% endblock %}
 {% block 'cpf' %}
-    {{ cpf }}
+    {{ dados_usuario.cpf }}
 {% endblock %}
 {% block 'apto' %}
-    {{ apto }}
+    {{ dados_usuario.apto }}
 {% endblock %}
 
 
 {% block 'dashboard'%}
-<h1 class="center">AGENDAMENTO</h1>
 <div class="container">
-    <button</button>
+    <div class="col">
+        <h1 class="text-center texto-principal">AGENDAMENTO</h1>
+            <a href="{% url 'agendamento:agendamento' %}" class="custom-btn">
+                <button type="button" class="btn custom-btn">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </a>
+    </div>
+    <div class="col mt-3">
+        <div class="card">
+            <div class="container">
+                <div class="d-flex justify-content-between pagination">
+                    <div class="card-header">
+                        Seus Agendamentos
+                    </div>
+                    <a href="#">
+                        <img style="height: 30px; width: 30px; margin-top: 10px;" src="{% static 'img/icons8-filtro-50.png' %}" alt="">
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card-body card-maior">
+                <div class="row">
+                    <!-- Cards menores -->
+                    {% for agendamento in agendamentos_pagina.object_list %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    {{ agendamento.data }}
+                                </div>
+                                <div class="card-body custom-card-body">
+                                    <p class="card-text text-sm mb-0">{{ agendamento.nome_estabelecimento }}</p>
+                                    <p class="card-text text-sm">{{ agendamento.codigo_estabelecimento }}</p>
+                                    <p class="card-text text-sm">Quarta-feira</p>
+                                    <p class="card-text text-sm">15:00</p>
+                                    <p class="card-text text-sm">Expirou? {{ agendamento.jah_expirou }}</p> 
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col mt-3">
+        <div class="container">
+            <div class="d-flex justify-content-between pagination">
+                <span class="step-link">
+                    {% if agendamentos_pagina.has_previous %}
+                        <a href="?page={{ agendamentos_pagina.previous_page_number }}">Anterior</a>
+                    {% endif %}
+                    {% if agendamentos_pagina.has_next %}
+                        <a href="?page={{ agendamentos_pagina.next_page_number }}">Próximo</a>
+                    {% endif %}
+                </span>
+                <span>
+                    Página {{ agendamentos_pagina.number }} de {{ agendamentos_pagina.paginator.num_pages }}.
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
