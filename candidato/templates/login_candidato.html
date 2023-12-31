@@ -16,7 +16,7 @@
                 </h5>
                 <form method="post" action="{% url 'login_candidato' %}">
                     {% csrf_token %}
-                    {% if messages %}
+                    {% if messages.error %}
                         <ul class="messages">
                         {% for message in messages %}
                             <li style="color: rgb(255, 93, 93); list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -42,4 +42,12 @@
             </div>
         </div>        
     </div>
+    {% if mensagem_sucesso %}
+    <script>
+      // Use JavaScript para exibir um alerta
+      window.onload = function() {
+        alert("Cadastrado com sucesso, Faça login para continuar.");
+      };
+    </script>
+    {% endif %}
 {% endblock %}

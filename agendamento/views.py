@@ -1,24 +1,25 @@
-from datetime import datetime
 from django.shortcuts import redirect, render
 from .models import Agendamento
 from candidato.models import Candidato
 import xml.etree.ElementTree as ET
-import requests
+from .utils import *
+from projeto_lais.validators import *
 
-def agendamento(request):
-
-    
+def agendamento_view(request):  
     if request.method == 'POST':
 
         usuario = request.user.id
 
         data = request.POST.get('data')
         hora = request.POST.get('hora')
-        dia = request.POST.get('dia')
+        dia = dia_da_semana(data)
         jah_expirou = False
         codigo_estabelecimento = request.POST.get('estabelecimento')
         nome_estabelecimento = request.POST.get('estabelecimento')
         candidato = Candidato.objects.get(id=usuario)
+
+        if not validar_data_agendamento(data):
+            print('data invalida')
 
         Agendamento.objects.create(
             data = data,
@@ -31,3 +32,6 @@ def agendamento(request):
         )
 
         return redirect('pagina_inicial')
+
+
+
