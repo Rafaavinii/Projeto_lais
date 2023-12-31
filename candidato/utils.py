@@ -48,6 +48,11 @@ def obter_agendamentos_pagina(request, usuario):
     #filtrando agendamentos por usuario
     agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
 
+    for agendamento in agendamentos:
+        if str(agendamento.data) <= str(datetime.now().date()) and str(agendamento.hora) < str(datetime.now().hour):
+            agendamento.jah_expirou = True
+            agendamento.save()
+
     lista_agendamento = []
     for agendamento in agendamentos:
         lista_agendamento.append(agendamento.__dict__)

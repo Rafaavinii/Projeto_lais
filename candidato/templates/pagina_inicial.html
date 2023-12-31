@@ -20,6 +20,11 @@
 
 
 {% block 'dashboard'%}
+{% if messages.error %}
+<div class="alert alert-danger" role="alert">
+  {{ messages }} ERRRRO
+</div>
+{% endif %}
 <div class="container">
     <div class="col">
         <h1 class="text-center texto-principal">AGENDAMENTO</h1>
@@ -109,18 +114,10 @@
                             <option value="17h">17h: candidatos idosos</option>
                         </select>
                     <div class="form-group">
-                        <label for="dia">Selecione um Dia da Semana</label>
-                        <select class="form-control" name="dia" id="dia">
-                            <option value="segunda">Quarta-feira</option>
-                            <option value="segunda">Quinta-feira</option>
-                            <option value="segunda">Sexta-feira</option>
-                            <option value="segunda">Sábado</option>
-                        </select>
-                    <div class="form-group">
                         <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
                         <select class="form-control" name="estabelecimento" id="estabelecimento">
                             {% for estabelecimento in estabelecimentos %}
-                                <option value="{{ estabelecimento.co_cnes }}">{{ estabelecimento.co_cnes }} - {{ estabelecimento.no_fantasia }}</option>
+                                <option value="{{ estabelecimento.co_cnes }},{{ estabelecimento.no_fantasia }}">{{ estabelecimento.co_cnes }} - {{ estabelecimento.no_fantasia }}</option>
                             {% endfor %}
                     </select>
                     </div>
@@ -134,5 +131,6 @@
       </div>
     </div>
   </div>
+
 {% endblock %}
 

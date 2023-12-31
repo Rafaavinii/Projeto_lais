@@ -55,9 +55,6 @@ def candidato_view(request):
         )
         return redirect('login_candidato')
 
-
-
-
 def login_candidato_view(request):
     if request.method == "GET":
         sucesso_message = messages.get_messages(request)
