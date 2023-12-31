@@ -5,30 +5,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import xml.etree.ElementTree as ET
-import requests
+from projeto_lais.consumirXML import XMLparser
 from .models import Candidato
 from agendamento.models import Agendamento
 
 def candidato(request):
     if request.method == 'GET':
-
-        # Enviando o grupos para o select
-        xml_url = 'https://selecoes.lais.huol.ufrn.br/media/grupos_atendimento.xml'
-
-        response = requests.get(xml_url)
-
-        if response.status_code == 200:
-            root = ET.fromstring(response.content)
-
-            grupos = []
-            for grupo in root.findall('grupoatendimento'):
-                codigo = grupo.find('nome').text
-                nome = grupo.find('nome').text
-                grupos.append({'codigo': codigo, 'nome': nome})
-
-            context = {'grupos': grupos}
-
+        context = obter_grupos()
         return render(request, 'candidato.html', context)
     
     elif request.method == 'POST':
@@ -60,6 +43,13 @@ def candidato(request):
 
         return redirect('login_candidato')
 
+def obter_grupos():
+    xml_url = 'https://selecoes.lais.huol.ufrn.br/media/grupos_atendimento.xml'
+
+    grupos = XMLparser(xml_url, 'grupoatendimento', ['codigo_si_pni', 'nome'])
+    context = {'grupos': grupos}
+    return context
+
 def login_candidato(request):
     if request.method == "GET":
         return render(request, 'login_candidato.html')
@@ -86,68 +76,69 @@ def logout_view(request):
 @login_required
 def candidato_autenticado(request):
     if request.method == "GET":
-
         usuario = request.user
-
-        nome = usuario.nome_completo
-        data_nascimento = usuario.data_nascimento
-        cpf = usuario.cpf
-        teve_covid = usuario.teve_covid
-        grupo_atendimento = usuario.grupo_atendimento
-
-        # calcular idade
-        data_atual = datetime.now()
-        idade = data_atual.year - data_nascimento.year - ((data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day))
-
-        #apto?
-        grupo_nao_apto = ['População Privada de Liberdade', 'Pessoas com Deficiência Institucionalizadas', 'Pessoas ACAMADAS de 80 anos ou mais']
-        if teve_covid or idade < 18 or grupo_atendimento in grupo_nao_apto:
-            apto = 'Não'
-        else:
-            apto = 'Sim'
+        dados_usuario = obter_dados_usuario(usuario)
+        agendamentos_pagina = obter_agendamentos_pagina(request, usuario)
+        estabelecimentos = obter_estabelecimentos()
         
-        #filtrando agendamentos por usuario
-        agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
-
-        lista_agendamento = []
-        for agendamento in agendamentos:
-            lista_agendamento.append(agendamento.__dict__)
-        
-        # Número de agendamentos por página
-        agendamentos_por_pagina = 6
-
-        # Cria um objeto Paginator
-        agendamentos_pagina = Paginator(lista_agendamento, agendamentos_por_pagina)
-
-        # Obtém o número da página a partir dos parâmetros GET
-        page_num = request.GET.get('page')
-        agendamentos_pagina = agendamentos_pagina.get_page(page_num)
-        
-        #consumindo xml
-        xml_url = 'https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml'
-
-        response = requests.get(xml_url)
-
-        if response.status_code == 200:
-            root = ET.fromstring(response.content)
-            
-            estabelecimentos = []
-            for estabelecimento in root.findall('estabelecimento'):
-                codigo = estabelecimento.find('co_cnes').text
-                nome = estabelecimento.find('no_fantasia').text
-                estabelecimentos.append({'codigo': codigo, 'nome': nome})
-
         context = {
-            'dados_usuario': {
-                'nome': nome,
-                'data_nascimento': data_nascimento,
-                'idade': idade,
-                'cpf': cpf,
-                'apto': apto,
-            },
+            'dados_usuario': dados_usuario,
             'agendamentos_pagina': agendamentos_pagina,
             'estabelecimentos': estabelecimentos,
         }
 
-
         return render(request, 'pagina_inicial.html', context)
+
+def obter_dados_usuario(usuario):
+    data_nascimento = usuario.data_nascimento
+    idade = calcular_idade(data_nascimento)
+    apto = verificar_apto(usuario)
+
+    return {
+        'nome': usuario.nome_completo,
+        'data_nascimento': data_nascimento,
+        'idade': idade,
+        'cpf': usuario.cpf,
+        'apto': apto,
+    }
+
+
+def calcular_idade(data_nascimento):
+    data_atual = datetime.now()
+    return data_atual.year - data_nascimento.year - ((data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day))
+
+
+def verificar_apto(usuario):
+    grupo_nao_apto = ['População Privada de Liberdade', 'Pessoas com Deficiência Institucionalizadas', 'Pessoas ACAMADAS de 80 anos ou mais']
+    if usuario.teve_covid or calcular_idade(usuario.data_nascimento) < 18 or usuario.grupo_atendimento in grupo_nao_apto:
+        apto = 'Não'
+    else:
+        apto = 'Sim'
+    
+    return apto
+
+
+def obter_estabelecimentos():
+    xml_url = 'https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml'
+    return XMLparser(xml_url, 'estabelecimento', ['no_fantasia', 'co_cnes'])
+
+
+def obter_agendamentos_pagina(request, usuario):
+    #filtrando agendamentos por usuario
+    agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
+
+    lista_agendamento = []
+    for agendamento in agendamentos:
+        lista_agendamento.append(agendamento.__dict__)
+    
+    # Número de agendamentos por página
+    agendamentos_por_pagina = 6
+
+    # Cria um objeto Paginator
+    agendamentos_pagina = Paginator(lista_agendamento, agendamentos_por_pagina)
+
+    # Obtém o número da página a partir dos parâmetros GET
+    page_num = request.GET.get('page')
+    agendamentos_pagina = agendamentos_pagina.get_page(page_num)
+
+    return agendamentos_pagina

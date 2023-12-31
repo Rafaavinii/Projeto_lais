@@ -113,14 +113,14 @@
                         <select class="form-control" name="dia" id="dia">
                             <option value="segunda">Quarta-feira</option>
                             <option value="segunda">Quinta-feira</option>
-                            <option value="segunda">Setxa-feira</option>
+                            <option value="segunda">Sexta-feira</option>
                             <option value="segunda">Sábado</option>
                         </select>
                     <div class="form-group">
                         <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
                         <select class="form-control" name="estabelecimento" id="estabelecimento">
                             {% for estabelecimento in estabelecimentos %}
-                                <option value="{{ estabelecimento.codigo }}">{{ estabelecimento.codigo }} - {{ estabelecimento.nome }}</option>
+                                <option value="{{ estabelecimento.co_cnes }}">{{ estabelecimento.co_cnes }} - {{ estabelecimento.no_fantasia }}</option>
                             {% endfor %}
                     </select>
                     </div>
