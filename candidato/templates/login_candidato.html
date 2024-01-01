@@ -16,13 +16,18 @@
                 </h5>
                 <form method="post" action="{% url 'login_candidato' %}">
                     {% csrf_token %}
-                    {% if messages.error %}
-                        <ul class="messages">
-                        {% for message in messages %}
-                            <li style="color: rgb(255, 93, 93); list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
+                    {% for mensagem in messages %}
+                        {% if mensagem.tags == 'error' %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ mensagem }}
+                            </div>
+                        {% endif %}
+                        {% if mensagem.tags == 'success' %}
+                            <div class="alert alert-success" role="alert">
+                                {{ mensagem }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                         <div class="form-group">
                             <label>CPF</label>
                             <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" required>

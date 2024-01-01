@@ -20,11 +20,7 @@
 
 
 {% block 'dashboard'%}
-{% if messages.error %}
-<div class="alert alert-danger" role="alert">
-  {{ messages }} ERRRRO
-</div>
-{% endif %}
+
 <div class="container">
     <div class="col">
         <h1 class="text-center texto-principal">AGENDAMENTO</h1>
@@ -85,6 +81,13 @@
             </div>
         </div>
     </div>
+    {% for mensagem in messages %}
+        {% if mensagem.tags == 'error' %}
+            <div class="alert alert-danger" role="alert">
+                {{ mensagem }}
+            </div>
+        {% endif %}
+    {% endfor %}
 </div>
 
 <!-- Modal -->
@@ -123,7 +126,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn custom-btn">Cadastrar</button>
+                        <button type="submit" class="btn custom-btn">Agendar</button>
                     </div>
             </form>
         </div>

@@ -8,6 +8,13 @@
 
 {% block 'dashboard' %}
     <div class="container mt-5">
+        {% for mensagem in messages %}
+            {% if mensagem.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+                    {{ mensagem }}
+                </div>
+            {% endif %}
+        {% endfor %}   
         <div class="card custom-card">
             <div class="card-body">
                 <h3 class="card-title d-flex justify-content-between custom-title">
@@ -74,8 +81,9 @@
                         </div>
                         
                 </form>
+
             </div>
-        </div>        
+        </div>    
     </div>
     </div>
 {% endblock %}

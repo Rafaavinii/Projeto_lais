@@ -67,7 +67,7 @@ def validar_cpf(cpf):
     if primeiro_digito != int(cpf[9]):
         return 'CPF inválido.'
     
-    if Candidato.objects.get(cpf=cpf).cpf == cpf:
+    if Candidato.objects.filter(cpf=cpf).exists():
         return 'CPF já cadastrado.'
 
 def validar_data_agendamento(data):

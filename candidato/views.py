@@ -43,17 +43,24 @@ def candidato_view(request):
             }
             return render(request, 'candidato.html', context)
 
-        #salvando candidato no banco
-        Candidato.objects.create_user(
-            nome_completo = nome,
-            username=cpf,
-            cpf=cpf,
-            data_nascimento=data_nascimento,
-            grupo_atendimento=grupo_atendimento,
-            teve_covid=teve_covid,
-            password=senha
-        )
-        return redirect('login_candidato')
+        print(verificar_apto(teve_covid, data_nascimento, grupo_atendimento))
+        if verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
+            #salvando candidato no banco
+            Candidato.objects.create_user(
+                nome_completo = nome,
+                username=cpf,
+                cpf=cpf,
+                data_nascimento=data_nascimento,
+                grupo_atendimento=grupo_atendimento,
+                teve_covid=teve_covid,
+                password=senha
+            )
+            messages.success(request, 'Candidato cadastrado com sucesso!')
+            return redirect('login_candidato')
+        
+        else:
+            messages.error(request, 'Você não é apto para participar da pesquisa!')
+            return redirect('candidato')
 
 def login_candidato_view(request):
     if request.method == "GET":
