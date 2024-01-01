@@ -43,7 +43,7 @@ def candidato_view(request):
             }
             return render(request, 'candidato.html', context)
 
-        print(verificar_apto(teve_covid, data_nascimento, grupo_atendimento))
+
         if verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
             #salvando candidato no banco
             Candidato.objects.create_user(

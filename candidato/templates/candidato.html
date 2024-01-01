@@ -46,7 +46,7 @@
                             <label for="grupoAtendimento">Selecione um Grupo de Atendimento:</label>
                             <select class="form-control" name="grupoAtendimento" id="grupoAtendimento">
                                 {% for grupo in grupos %}
-                                <option value="{{ grupo.codigo_si_pni }}">{{ grupo.codigo_si_pni }} - {{ grupo.nome }}</option>
+                                <option value="{{ grupo.nome }}">{{ grupo.codigo_si_pni }} - {{ grupo.nome }}</option>
                                 {% endfor %}
                         </select>
                         </div>

@@ -23,15 +23,16 @@ def obter_dados_usuario(usuario):
         'apto': apto,
     }
 
-
 def calcular_idade(data_nascimento):
     data_atual = datetime.now()
-    data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d')
+    
     return data_atual.year - data_nascimento.year - ((data_atual.month, data_atual.day) < (data_nascimento.month, data_nascimento.day))
 
 
 def verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
+    data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
     grupo_nao_apto = ['População Privada de Liberdade', 'Pessoas com Deficiência Institucionalizadas', 'Pessoas ACAMADAS de 80 anos ou mais']
+    
     if teve_covid or calcular_idade(data_nascimento) < 18 or grupo_atendimento in grupo_nao_apto:
         apto = False
     else:
