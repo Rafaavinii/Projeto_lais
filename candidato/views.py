@@ -89,15 +89,17 @@ def logout_view(request):
 @login_required
 def candidato_autenticado_view(request):
     if request.method == "GET":
+        ordem = request.GET.get('ordem')
         usuario = request.user
         dados_usuario = obter_dados_usuario(usuario)
-        agendamentos_pagina = obter_agendamentos_pagina(request, usuario)
+        agendamentos_pagina = obter_agendamentos_pagina(request, usuario, ordem)
         estabelecimentos = obter_estabelecimentos()
         
         context = {
             'dados_usuario': dados_usuario,
             'agendamentos_pagina': agendamentos_pagina,
             'estabelecimentos': estabelecimentos,
+            'ordem': ordem,
         }
 
         return render(request, 'pagina_inicial.html', context)

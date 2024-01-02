@@ -17,9 +17,7 @@
   width: 10px; 
   background-color: var(--differential-color);
   border-radius: 0 5px 5px 0;
-}
-
-  
+} 
   
 .custom-title{
   color: var(--differential-color);
@@ -28,4 +26,53 @@
 .custom-btn {
   background-color: var(--differential-color);
   color: var(--light-color);
+}
+
+.card-maior {
+  background-color: #ffeaf2;
+}
+
+.card-menor:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.card-menor-expirado {
+  background-color: rgba(78, 78, 78, 0.144);
+  color: #fff;
+  font-weight: bold;
+  -webkit-text-stroke: 0.2px black; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.informacao-hover {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: rgba(116, 115, 115, 0.63);
+}
+
+.card-menor-expirado:hover .informacao-hover {
+  opacity: 1;
+  
+}
+
+.custom-card-body {
+  color: var(--differential-color);
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-style: inherit;
+  text-align: center;
+  background-color: white;
 }

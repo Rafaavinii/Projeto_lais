@@ -22,10 +22,10 @@ def agendamento_view(request):
         nome_estabelecimento = no_estabelecimento
         candidato = Candidato.objects.get(id=usuario)
 
-        if not validar_data_agendamento(data):
-            msg_erro = "Data inserida inválida. Por favor, tente novamente."
-            messages.error(request, msg_erro)
-            return redirect('pagina_inicial')
+        # if not validar_data_agendamento(data):
+        #     msg_erro = "Data inserida inválida. Por favor, tente novamente."
+        #     messages.error(request, msg_erro)
+        #     return redirect('pagina_inicial')
 
         Agendamento.objects.create(
             data = data,

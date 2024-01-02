@@ -35,22 +35,35 @@
                     <div class="card-header">
                         Seus Agendamentos
                     </div>
-                    <a href="#">
-                        <img style="height: 30px; width: 30px; margin-top: 10px;" src="{% static 'img/icons8-filtro-50.png' %}" alt="">
+                    {% if not ordem or ordem == 'decrescente' %}
+                    <a href="?ordem=crescente">
+                        <img style="height: 30px; width: 30px; margin-top: 10px;" src="{% static 'img/icons8-ordem-crescente-50.png' %}" alt="">
                     </a>
+                    {% endif %}
+                    {% if ordem == 'crescente' %}
+                    <a href="?ordem=decrescente">
+                        <img style="height: 30px; width: 30px; margin-top: 10px;" src="{% static 'img/icons8-ordem-decrescente-50.png' %}" alt="">
+                    </a>
+                    {% endif %}
                 </div>
             </div>
             
             <div class="card-body card-maior">
+                {% if not agendamentos_pagina.object_list %}
+                    <div style="text-align: center;">
+                        <p style="color: rgba(41, 41, 41, 0.479);">Você ainda não possue agendamento.</p>
+                    </div>
+                {% endif %}
                 <div class="row">
                     <!-- Cards menores -->
                     {% for agendamento in agendamentos_pagina.object_list %}
                         <div class="col-md-4 mb-3">
-                            <div class="card">
+                            <div class="card card-menor {% if agendamento.jah_expirou %} card-menor-expirado {% endif %}">
+                                <p class="informacao-hover">Agendamento expirado.</p>
                                 <div class="card-header">
                                     {{ agendamento.data }}
                                 </div>
-                                <div class="card-body custom-card-body">
+                                <div class="card-body text-center {% if not agendamento.jah_expirou %} custom-card-body {% endif %}">
                                     <p class="card-text text-sm mb-0">{{ agendamento.nome_estabelecimento }}</p>
                                     <p class="card-text text-sm">{{ agendamento.codigo_estabelecimento }}</p>
                                     <p class="card-text text-sm">{{ agendamento.dia }}</p>

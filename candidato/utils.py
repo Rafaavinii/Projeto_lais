@@ -30,7 +30,9 @@ def calcular_idade(data_nascimento):
 
 
 def verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
-    data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
+    if type(data_nascimento) == str:
+        data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
+    
     grupo_nao_apto = ['População Privada de Liberdade', 'Pessoas com Deficiência Institucionalizadas', 'Pessoas ACAMADAS de 80 anos ou mais']
     
     if teve_covid or calcular_idade(data_nascimento) < 18 or grupo_atendimento in grupo_nao_apto:
@@ -46,14 +48,25 @@ def obter_estabelecimentos():
     return XMLparser(xml_url, 'estabelecimento', ['no_fantasia', 'co_cnes'])
 
 
-def obter_agendamentos_pagina(request, usuario):
+def obter_agendamentos_pagina(request, usuario, ordem='decrescente'):
     #filtrando agendamentos por usuario
     agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
 
+    #Verificando se o agendamento já expirou
     for agendamento in agendamentos:
-        if str(agendamento.data) <= str(datetime.now().date()) and str(agendamento.hora) < str(datetime.now().hour):
+        if str(agendamento.data) < str(datetime.now().date()):
             agendamento.jah_expirou = True
             agendamento.save()
+        
+        elif str(agendamento.data) == str(datetime.now().date()) and str(agendamento.hora) <= str(datetime.now().hour):
+            agendamento.jah_expirou = True
+            agendamento.save()
+
+    #orgenando por data e hora
+    if ordem == 'crescente':
+        agendamentos = agendamentos.order_by('data', 'hora')
+    else:
+        agendamentos = agendamentos.order_by('-data', '-hora')
 
     lista_agendamento = []
     for agendamento in agendamentos:

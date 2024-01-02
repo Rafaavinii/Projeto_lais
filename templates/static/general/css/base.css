@@ -59,13 +59,7 @@ a.logout-btn {
   color: #ffffff;
 }
 
-.custom-card-body {
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  font-style: inherit;
-  text-align: center;
-  background-color: var(--differential-color);
-}
+
 
 .texto-principal {
   box-shadow: 0 4px 5px -2px rgba(0, 0, 0, 0.1);
@@ -73,6 +67,4 @@ a.logout-btn {
   padding-top: -5px;
 }
 
-.card-maior {
-  background-color: #ffeaf2;
-}
+
