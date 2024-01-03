@@ -29,7 +29,7 @@
 }
 
 .card-maior {
-  background-color: #ffeaf2;
+  background-color: rgb(244, 252, 244);
 }
 
 .card-menor:hover {
@@ -75,4 +75,9 @@
   font-style: inherit;
   text-align: center;
   background-color: white;
+}
+
+.texto-card {
+  font-size: 12px;
+  box-shadow: 0 2px rgba(0, 0, 0, 0.3);
 }

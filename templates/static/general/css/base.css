@@ -36,6 +36,7 @@ a.logout-btn {
   color: white;
   font-size: 18px;
   font-weight: bold;
+  border-left: 1px solid black;
 }
 
 .titulo-dados-candidato {

@@ -72,7 +72,7 @@ def validar_cpf(cpf):
 
 def validar_data_agendamento(data):
     data_atual = datetime.now()
-    if data <= str(data_atual):
+    if data < str(data_atual):
         return False
     return True
 
