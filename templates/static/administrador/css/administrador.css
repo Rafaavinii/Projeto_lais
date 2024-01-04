@@ -4,8 +4,8 @@
     color: white;
     font-size: 18px;
     font-weight: bold;
-    
 }
+
 
 .itens{
     text-decoration: none; 
@@ -15,4 +15,23 @@
     border-bottom: 1px solid #ffffff;
     padding-bottom: 5px;
     font-size: 20px;
+    margin-top: auto;
+}
+
+.titulo-dashboard{
+    margin: 10px;
+}
+
+.container-titulo{
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.home-section{
+    background-color: rgb(244, 255, 255);
+}
+
+.opcao {
+    border: 1px 1px solid #000;
+    text-decoration: none;
 }

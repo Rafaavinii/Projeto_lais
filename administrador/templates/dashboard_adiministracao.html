@@ -1,0 +1,96 @@
+{% extends 'base_painel_adm.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+
+{% block 'dashboard'%}
+    <div class="container-titulo">
+        <div class="titulo-dashboard">
+            <h1>Dashboard</h1>
+            <div class="opcoes">
+                <a class="opcao" href="#">opcao1</a>
+                <a class="opcao" href="#">opcao2</a>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Agendamento por Estabelecimento</h5>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <div class="col" style="width: 30%; margin: auto;">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    function encurtarNome(nome, comprimentoMaximo) {
+        if (nome.length > comprimentoMaximo) {
+            return nome.substring(0, comprimentoMaximo) + '...';
+            }
+            return nome;
+    }
+
+
+    var barNome = {{ label|safe }};
+
+    
+    var barQuantidade = {{ quantidade|safe }};
+
+    const ctx = document.getElementById('barChart');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: barNome,
+        datasets: [{
+            label: 'Quantidade de Agendamentos',
+            data: barQuantidade,
+            borderWidth: 1,
+            barPercentage: 0.6, // Porcentagem da largura da barra em relação ao espaço disponível
+            categoryPercentage: 1,
+            backgroundColor: '#06d6a0',
+
+        }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left', // Alinha os rótulos à esquerda
+                    min: 0 // Garante que a escala comece em 0
+                },
+            },
+        }
+    });
+
+
+    const pieChartCanvas = document.getElementById('pieChart')
+    new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: {
+            labels: ['Aptos', 'Inaptos'],
+            datasets: [{
+                data: [30, 40],
+                backgroundColor: ['#06d6a0', '#e63946']
+            }]
+        }
+    });
+
+
+</script>
+
+{% endblock %}
+
+  

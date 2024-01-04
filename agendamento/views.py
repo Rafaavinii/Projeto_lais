@@ -40,13 +40,6 @@ def agendamento_view(request):
 
         return redirect('pagina_inicial')
 
-def agendamento_por_vez(usuario):
-    agendamento = Agendamento.objects.filter(candidato_id=usuario.id).last()
-    if not agendamento or agendamento.jah_expirou == True:
-        return True
-    
-    return False
-
 
 
 
