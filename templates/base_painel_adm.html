@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'administrador/css/administrador.css' %}">
+    <link rel="stylesheet" href="{% static 'general/css/general.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block 'head' %}{% endblock %}
+
+    <title>{% block 'title' %}{% endblock %}</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-3 pt-4 d-none d-md-block sidebar">
+          <div class="container titulo-adm">
+            <p>Administração</p>
+          </div>
+          <div class="sidebar-sticky pt-3">
+            <ul class="nav flex-column itens">
+              <li class="nav-item p-2">
+                <a href="#">Gerencimaneto de Estabelecimentos</a>
+              </li>
+              <li class="nav-item p-2">
+                <a href="#">Dashboard</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      
+        <section class="col-md-9 pt-4 home-section">
+            {% block 'dashboard'%}
+            {% endblock %}
+
+        </section>
+      </div>
+    </div>
+
+    {% block 'body' %}
+    {% endblock %}
+    <script src="{% static 'administrador/js/administrador.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -22,8 +22,7 @@ def agendamento_view(request):
         nome_estabelecimento = no_estabelecimento
         candidato = Candidato.objects.get(id=usuario.id)
 
-        # if agendamento_por_vez(usuario) and validar_data_agendamento(data):
-        if True:
+        if agendamento_por_vez(usuario) and validar_data_agendamento(data):
             Agendamento.objects.create(
                 data = data,
                 hora = hora,

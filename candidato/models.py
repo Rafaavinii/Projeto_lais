@@ -8,7 +8,6 @@ class Candidato(AbstractUser):
     grupo_atendimento = models.CharField(max_length=255, blank=True, null=True)
     teve_covid = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'cpf'
     REQUIRED_FIELDS = ['nome_completo', 'data_nascimento']
 
     def __str__(self):

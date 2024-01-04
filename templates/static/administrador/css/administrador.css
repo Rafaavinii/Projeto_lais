@@ -1,0 +1,18 @@
+.sidebar {
+    height: 100vh;
+    background-color: var(--dark-sidebar-color);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    
+}
+
+.itens{
+    text-decoration: none; 
+}
+
+.titulo-adm{
+    border-bottom: 1px solid #ffffff;
+    padding-bottom: 5px;
+    font-size: 20px;
+}

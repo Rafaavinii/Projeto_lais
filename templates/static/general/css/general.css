@@ -5,6 +5,8 @@
     --light-color: #eee5e5;
     --contrast-color: #f0f7da;
     --differential-color: #1DA584;
-    --test: #f13565;
+    --backgroud-color: rgb(244, 252, 244);
+    --dark-sidebar-color: #343a40;
+    --light-sidebar-color: #495057;
 
 }

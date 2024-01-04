@@ -29,7 +29,7 @@
 }
 
 .card-maior {
-  background-color: rgb(244, 252, 244);
+  background-color: var(--background-color);
 }
 
 .card-menor:hover {
