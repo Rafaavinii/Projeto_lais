@@ -4,12 +4,24 @@
     color: white;
     font-size: 18px;
     font-weight: bold;
+    padding: 0px;
 }
-
 
 .itens{
-    text-decoration: none; 
+    width: 100hv;
 }
+
+.itens a{
+    text-decoration: none;
+    color: white;
+}
+
+.itens a:hover{
+    color: #000;
+    background-color: white;
+    border-radius: 20px 0 0 20px;
+}
+
 
 .titulo-adm{
     border-bottom: 1px solid #ffffff;

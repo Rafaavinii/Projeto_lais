@@ -18,18 +18,22 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 pt-3 d-none d-md-block sidebar">
+        <nav class="col-md-3 pt-4 d-none d-md-block sidebar">
           <div class="container titulo-adm">
             <p>Administração</p>
           </div>
           <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column itens">
-              <li class="nav-item p-2">
-                <a href="#">Gerencimaneto de Estabelecimentos</a>
-              </li>
-              <li class="nav-item p-2">
-                <a href="#">Dashboard</a>
-              </li>
+              <a href="{% url 'administrador_estabelecimento' %}">
+                <li class="nav-item p-2">
+                  Gerencimaneto de Estabelecimentos
+                </li>
+              </a>
+              <a href="{% url 'administrador_dashboard' %}">
+                <li class="nav-item p-2">
+                  Dashboard
+                </li>
+              </a>
             </ul>
           </div>
         </nav>

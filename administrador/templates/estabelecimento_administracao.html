@@ -1,0 +1,37 @@
+{% extends 'base_painel_adm.html' %}
+{% load static %}
+
+{% block 'dashboard'%}
+<div class="container">
+    <div class="table-responsive-sm" style="height: 100vh; overflow-y: auto;">
+        <table class="table table-hover">
+            {% if not filtro or filtro == 'nome' %}
+            <a href="?filtro=codigo">
+                Filtro
+            </a>
+            {% endif %}
+            {% if filtro == 'codigo' %}
+            <a href="?filtro=nome">
+                Filtro
+            </a>
+            {% endif %}
+        <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Código</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for estabelecimento in estabelecimentos %}
+            <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ estabelecimento.nome }}</td>
+            <td>{{ estabelecimento.codigo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
