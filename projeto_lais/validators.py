@@ -71,8 +71,10 @@ def validar_cpf(cpf):
         return 'CPF já cadastrado.'
 
 def validar_data_agendamento(data):
+    data_formatada = datetime.strptime(data, '%Y-%m-%d')
+    dia_da_semana = data_formatada.weekday()
     data_atual = datetime.now()
-    if data < str(data_atual):
+    if data < str(data_atual) or (dia_da_semana in [0, 1, 6]):
         return False
     return True
 

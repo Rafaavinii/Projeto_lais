@@ -1,5 +1,6 @@
 from datetime import datetime
 from agendamento.models import Agendamento
+from estabelecimento.models import Estabalecimento
 from projeto_lais.consumirXML import XMLparser
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -42,15 +43,10 @@ def verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
     
     return apto
 
-
-def obter_estabelecimentos():
-    xml_url = 'https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml'
-    return XMLparser(xml_url, 'estabelecimento', ['no_fantasia', 'co_cnes'])
-
-
 def obter_agendamentos_pagina(request, usuario, ordem='decrescente'):
     #filtrando agendamentos por usuario
     agendamentos = Agendamento.objects.filter(candidato_id=usuario.id)
+    
 
     #Verificando se o agendamento já expirou
     for agendamento in agendamentos:
@@ -70,8 +66,11 @@ def obter_agendamentos_pagina(request, usuario, ordem='decrescente'):
 
     lista_agendamento = []
     for agendamento in agendamentos:
-        lista_agendamento.append(agendamento.__dict__)
+        estabelecimento = Estabalecimento.objects.get(id=agendamento.estabelecimento.id)
+        agendamento.__dict__.update({'nome_estabelecimento': estabelecimento.nome, 'codigo_estabelecimento': estabelecimento.codigo})
+        lista_agendamento.append(agendamento)
     
+
     # Número de agendamentos por página
     agendamentos_por_pagina = 6
 

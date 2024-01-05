@@ -1,0 +1,87 @@
+{% extends 'base_autenticado.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var today = new Date();
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                {
+                title: 'Evento 1',
+                start: '2024-01-05',
+                backgroundColor: 'blue' // Cor de fundo do evento
+                },
+                // Adicione mais eventos aqui
+            ],
+          });
+          calendar.render();
+
+          calendar.on('dateClick', function(info) {
+            console.log('clicked on ' + info.dateStr);
+            });
+        });
+  
+    </script>
+
+    <style>
+        :root {
+            --fc-border-color: black;
+            --fc-daygrid-event-dot-width: 5px;
+        }
+    </style>
+
+{% endblock %}
+
+{% block 'nome' %}
+    {{ dados_usuario.nome }}
+{% endblock %}
+{% block 'data' %}
+    {{ dados_usuario.idade }} anos ({{ dados_usuario.data_nascimento }}) 
+{% endblock %}
+{% block 'cpf' %}
+    {{ dados_usuario.cpf }}
+{% endblock %}
+{% block 'apto' %}
+    {{ dados_usuario.apto }}
+{% endblock %}
+
+
+{% block 'dashboard'%}
+
+<div class="container">
+    <form method="post" action="{% url 'agendamento:agendamento' %}">
+        {% csrf_token %}
+            <div class="form-group">
+                <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
+                <select class="form-control" name="estabelecimento" id="estabelecimento">
+                    {% for estabelecimento in estabelecimentos %}
+                        <option value="{{ estabelecimento.codigo }},{{ estabelecimento.nome }}">{{ estabelecimento.codigo }} - {{ estabelecimento.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <div id="calendar"></div>
+            </div>
+            <div class="form-group">
+                <label for="horario">Selecione um Horario</label>
+                <select class="form-control" name="hora" id="hora">
+                    <option value="13h">{}:00</option>
+                    <option value="14h">{}:12</option>
+                    <option value="15h">{}:24</option>
+                    <option value="16h">{}:36</option>
+                    <option value="17h">{}:48</option>
+                </select>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="submit" class="btn custom-btn">Agendar</button>
+            </div>
+    </form>
+</div>
+
+{% endblock %}

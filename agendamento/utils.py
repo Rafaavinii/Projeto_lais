@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from agendamento.models import Agendamento
+from django.db.models import Count
 
 
 def dia_da_semana(data):
@@ -16,3 +17,31 @@ def agendamento_por_vez(usuario):
         return True
     
     return False
+
+# def vagas_estabelecimento(estabelecimento):
+#     agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento.id)
+
+#     for agendamento in agendamentos:
+#         agendamento
+    
+#     if cont >= 5:
+#         return False
+    
+#     return True
+
+def disponibilidade_estabelecimento(estabelecimento):
+    estabelecimentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
+    datas_iguais = estabelecimentos.values('data', 'hora').annotate(total=Count('data'))
+    indisponiveis = {'data': [], 'hora':[]}
+
+    for agendamento in datas_iguais:
+        if agendamento['total'] >= 5:
+            indisponiveis['data'].append(agendamento['data'])
+            indisponiveis['hora'].append(agendamento['hora'])
+
+
+    
+    print(indisponiveis)
+    
+    
+    return True

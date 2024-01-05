@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from projeto_lais.validators import *
 from .utils import *
+from agendamento.utils import *
 from .models import Candidato
 
 def candidato_view(request):
@@ -91,13 +92,22 @@ def candidato_autenticado_view(request):
         usuario = request.user
         dados_usuario = obter_dados_usuario(usuario)
         agendamentos_pagina = obter_agendamentos_pagina(request, usuario, ordem)
-        estabelecimentos = obter_estabelecimentos()
-        
+
         context = {
             'dados_usuario': dados_usuario,
             'agendamentos_pagina': agendamentos_pagina,
-            'estabelecimentos': estabelecimentos,
             'ordem': ordem,
         }
+        disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
+
+        # for i in range(5):
+        #     Agendamento.objects.create(
+        #             data = '2024-01-05',
+        #             hora = '16',
+        #             dia = 'Quarta-feira',
+        #             jah_expirou = True,
+        #             candidato_id = 14,
+        #             estabelecimento_id = 2
+        #     )
 
         return render(request, 'pagina_inicial.html', context)

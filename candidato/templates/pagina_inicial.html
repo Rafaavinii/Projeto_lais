@@ -24,9 +24,11 @@
 <div class="container">
     <div class="col">
         <h1 class="text-center texto-principal">AGENDAMENTO</h1>
+        <a href="{% url 'agendamento:agendamento' %}">
         <button type="button" class="btn custom-btn" data-toggle="modal" data-target="#exampleModal">
             <i class="fa fa-plus"></i>
-        </button>    
+        </button>
+        </a>    
     </div>
     {% for mensagem in messages %}
         {% if mensagem.tags == 'error' %}
@@ -103,52 +105,8 @@
         </div>
     </div>
 
+
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Novo Agendamento</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form method="post" action="{% url 'agendamento:agendamento' %}">
-                {% csrf_token %}
-                    <div class="form-group">
-                        <label>Data</label>
-                        <input type="date" class="form-control" placeholder="dd/mm/aaaa" name="data" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="horario">Selecione um Horario</label>
-                        <select class="form-control" name="hora" id="hora">
-                            <option value="13h">13h: candidatos de 18 a 29 anos</option>
-                            <option value="14h">14h: candidatos de 30 a 39 anos</option>
-                            <option value="15h">15h: candidatos de 40 a 49 anos</option>
-                            <option value="16h">16h: candidatos de 50 a 59 anos</option>
-                            <option value="17h">17h: candidatos idosos</option>
-                        </select>
-                    <div class="form-group">
-                        <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
-                        <select class="form-control" name="estabelecimento" id="estabelecimento">
-                            {% for estabelecimento in estabelecimentos %}
-                                <option value="{{ estabelecimento.co_cnes }},{{ estabelecimento.no_fantasia }}">{{ estabelecimento.co_cnes }} - {{ estabelecimento.no_fantasia }}</option>
-                            {% endfor %}
-                    </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn custom-btn">Agendar</button>
-                    </div>
-            </form>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
 {% endblock %}
 
