@@ -1,41 +1,14 @@
 {% extends 'base_autenticado.html' %}
 {% load static %}
 
+
 {% block 'head' %}
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
-    <script>
+<style>
+    .list-group-item.active {
+        border: 1px solid green!important;
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-          var today = new Date();
-
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: [
-                {
-                title: 'Evento 1',
-                start: '2024-01-05',
-                backgroundColor: 'blue' // Cor de fundo do evento
-                },
-                // Adicione mais eventos aqui
-            ],
-          });
-          calendar.render();
-
-          calendar.on('dateClick', function(info) {
-            console.log('clicked on ' + info.dateStr);
-            });
-        });
-  
-    </script>
-
-    <style>
-        :root {
-            --fc-border-color: black;
-            --fc-daygrid-event-dot-width: 5px;
-        }
-    </style>
-
+</style>
 {% endblock %}
 
 {% block 'nome' %}
@@ -66,22 +39,52 @@
                 </select>
             </div>
             <div class="form-group">
-                <div id="calendar"></div>
+                <div class="container">
+                    <div class="d-flex" id="itens">
+                        {% for data in datas %}
+                            <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ data }}" onclick="selecionarItem('{{ data }}')">{{ data }}</a>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="itens_selecionados" id="itensSelecionados">
+                </div>
             </div>
             <div class="form-group">
                 <label for="horario">Selecione um Horario</label>
-                <select class="form-control" name="hora" id="hora">
-                    <option value="13h">{}:00</option>
-                    <option value="14h">{}:12</option>
-                    <option value="15h">{}:24</option>
-                    <option value="16h">{}:36</option>
-                    <option value="17h">{}:48</option>
-                </select>
+                <div class="d-flex" id="itens">
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="A" onclick="selecionarItem('A')">{{ hora }}:00</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="B" onclick="selecionarItem('B')">{{ hora }}:12</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="C" onclick="selecionarItem('C')">{{ hora }}:24</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="D" onclick="selecionarItem('D')">{{ hora }}:36</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="E" onclick="selecionarItem('E')">{{ hora }}:48</a>
+                </div>
+                <input type="hidden" name="itens_selecionados" id="itensSelecionados">
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                 <button type="submit" class="btn custom-btn">Agendar</button>
             </div>
     </form>
 </div>
+<script>
+    var itensSelecionados = [];
 
+    function selecionarItem(item) {
+        var elemento = document.querySelector('.list-group-item[data-item="' + item + '"]');
+        if (elemento) {
+            // Desmarca todos os itens
+            document.querySelectorAll('.list-group-item').forEach(function(item) {
+                item.classList.remove('active');
+                });
+
+                // Marca apenas o item clicado
+                elemento.classList.add('active');
+
+                // Atualiza o valor do campo hidden com o item selecionado
+                document.getElementById('itensSelecionados').value = item;
+
+            // Atualiza o valor do campo hidden com os itens selecionados
+            document.getElementById('itensSelecionados').value = itensSelecionados.join(',');
+        }
+    }
+</script>
 {% endblock %}

@@ -1,15 +1,7 @@
 from datetime import datetime
-
+import calendar
 from agendamento.models import Agendamento
 from django.db.models import Count
-
-
-def dia_da_semana(data):
-    data_formatada = datetime.strptime(data, '%Y-%m-%d')
-    dia_da_semana = data_formatada.weekday()
-    nomes_dias_semana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
-    nome_dia_da_semana = nomes_dias_semana[dia_da_semana]
-    return nome_dia_da_semana
 
 def agendamento_por_vez(usuario):
     agendamento = Agendamento.objects.filter(candidato_id=usuario.id).last()
@@ -18,17 +10,6 @@ def agendamento_por_vez(usuario):
     
     return False
 
-# def vagas_estabelecimento(estabelecimento):
-#     agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento.id)
-
-#     for agendamento in agendamentos:
-#         agendamento
-    
-#     if cont >= 5:
-#         return False
-    
-#     return True
-
 def disponibilidade_estabelecimento(estabelecimento):
     estabelecimentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
     datas_iguais = estabelecimentos.values('data', 'hora').annotate(total=Count('data'))
@@ -36,12 +17,36 @@ def disponibilidade_estabelecimento(estabelecimento):
 
     for agendamento in datas_iguais:
         if agendamento['total'] >= 5:
-            indisponiveis['data'].append(agendamento['data'])
             indisponiveis['hora'].append(agendamento['hora'])
+    
+    indisponiveis['data'].append(agendamento['data'])
 
+    datas = obter_dias_quarta_a_sabado(2024, 1)
+    
+    for data in indisponiveis['data']:
+        data = str(data)
+        if data in datas:
+            datas.remove(data)
 
+    return datas
+
+def obter_dia_da_semana(data):
+    data_formatada = datetime.strptime(data, '%Y-%m-%d')
+    dia_da_semana = data_formatada.weekday()
+    return dia_da_semana
+
+def obter_dias_quarta_a_sabado(ano, mes):
+    # Retorna uma matriz de listas onde cada lista representa uma semana do mês
+    semanas = calendar.monthcalendar(ano, mes)
+    datas = []
+    # Itera sobre cada semana do mês
+    for semana in semanas:
+        # Itera sobre cada dia da semana
+        for dia in semana:
+            # Se o dia estiver dentro do mês, imprima a data
+            if dia != 0:
+                data = f'{ano}-{mes:02d}-{dia:02d}'
+                if not obter_dia_da_semana(data) in [0, 1, 6]:
+                    datas.append(data)
     
-    print(indisponiveis)
-    
-    
-    return True
+    return datas

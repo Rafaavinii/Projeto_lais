@@ -14,7 +14,27 @@ def agendamento_view(request):
         usuario = request.user
         estabelecimentos = obter_estabelecimentos()
         dados_usuario = obter_dados_usuario(usuario)
-        return render(request, 'form_agendamento.html', {'estabelecimentos': estabelecimentos, 'dados_usuario': dados_usuario})
+        idade = dados_usuario['idade']
+
+        if idade >= 18 and idade <= 29:
+            hora = 13
+        elif idade >= 30 and idade <= 39:
+            hora = 14
+        elif idade >= 40 and idade <= 49:
+            hora = 15
+        elif idade >= 50 and idade <= 59:
+            hora = 16
+        else:
+            hora = 17
+
+        datas = disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
+    
+        return render(request, 'form_agendamento.html', {
+            'estabelecimentos': estabelecimentos, 
+            'dados_usuario': dados_usuario, 
+            'hora': hora,
+            'datas': datas
+        })
       
     if request.method == 'POST':
 
@@ -25,7 +45,6 @@ def agendamento_view(request):
 
         data = '2024-01-05'
         hora = request.POST.get('hora')
-        dia = dia_da_semana(data)
         jah_expirou = False
         candidato = Candidato.objects.get(id=usuario.id)
         estabelecimento = Estabalecimento.objects.get(codigo=cod)
@@ -34,7 +53,7 @@ def agendamento_view(request):
             Agendamento.objects.create(
                 data = data,
                 hora = hora,
-                dia = dia,
+                dia = 'quarta',
                 jah_expirou = jah_expirou,
                 candidato = candidato,
                 estabelecimento = estabelecimento

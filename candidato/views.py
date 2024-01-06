@@ -92,11 +92,25 @@ def candidato_autenticado_view(request):
         usuario = request.user
         dados_usuario = obter_dados_usuario(usuario)
         agendamentos_pagina = obter_agendamentos_pagina(request, usuario, ordem)
+        idade = dados_usuario['idade']
+
+        print(idade)
+        if idade >= 18 and idade <= 29:
+            hora = 13
+        elif idade >= 30 and idade <= 39:
+            hora = 14
+        elif idade >= 40 and idade <= 49:
+            hora = 15
+        elif idade >= 50 and idade <= 59:
+            hora = 16
+        else:
+            hora = 17
 
         context = {
             'dados_usuario': dados_usuario,
             'agendamentos_pagina': agendamentos_pagina,
             'ordem': ordem,
+            'hora': hora,
         }
         disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
 
