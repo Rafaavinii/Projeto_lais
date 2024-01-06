@@ -16,18 +16,10 @@ def agendamento_view(request):
         dados_usuario = obter_dados_usuario(usuario)
         idade = dados_usuario['idade']
 
-        if idade >= 18 and idade <= 29:
-            hora = 13
-        elif idade >= 30 and idade <= 39:
-            hora = 14
-        elif idade >= 40 and idade <= 49:
-            hora = 15
-        elif idade >= 50 and idade <= 59:
-            hora = 16
-        else:
-            hora = 17
 
         datas = disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
+        
+        hora = horario_por_idade(idade)
     
         return render(request, 'form_agendamento.html', {
             'estabelecimentos': estabelecimentos, 
@@ -42,9 +34,11 @@ def agendamento_view(request):
 
         estabelecimento = request.POST.get('estabelecimento')
         cod, no_estabelecimento = estabelecimento.split(',')
+        horario = request.POST.get('hora')
+        hora, minuto = horario.split(':')
 
-        data = '2024-01-05'
-        hora = request.POST.get('hora')
+
+        data = '2024-01-10'
         jah_expirou = False
         candidato = Candidato.objects.get(id=usuario.id)
         estabelecimento = Estabalecimento.objects.get(codigo=cod)
@@ -53,16 +47,19 @@ def agendamento_view(request):
             Agendamento.objects.create(
                 data = data,
                 hora = hora,
+                minuto = minuto,
                 dia = 'quarta',
                 jah_expirou = jah_expirou,
                 candidato = candidato,
                 estabelecimento = estabelecimento
             )
+            return redirect('pagina_inicial')
+        
         elif not agendamento_por_vez(usuario):
             messages.error(request, 'Você já possui agendamento.')
         
         elif not validar_data_agendamento(data):
-            messages.error(request, 'Data inválida.')
+            messages.error(request, 'Data ou dia da semana inválido. Por favor, escolha uma dia entre quarta-feira e sábado.')
 
         return redirect('pagina_inicial')
 

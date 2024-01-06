@@ -5,7 +5,9 @@
 {% block 'head' %}
 <style>
     .list-group-item.active {
-        border: 1px solid green!important;
+        border: 2px solid green!important;
+        background-color: white;
+        color: black;
     }
 
 </style>
@@ -30,6 +32,13 @@
 <div class="container">
     <form method="post" action="{% url 'agendamento:agendamento' %}">
         {% csrf_token %}
+        {% for mensagem in messages %}
+        {% if mensagem.tags == 'error' %}
+            <div class="alert alert-danger mt-2" role="alert">
+                {{ mensagem }}
+            </div>
+        {% endif %}
+        {% endfor %}
             <div class="form-group">
                 <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
                 <select class="form-control" name="estabelecimento" id="estabelecimento">
@@ -45,19 +54,19 @@
                             <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ data }}" onclick="selecionarItem('{{ data }}')">{{ data }}</a>
                         {% endfor %}
                     </div>
-                    <input type="hidden" name="itens_selecionados" id="itensSelecionados">
+                    <input type="hidden" name="data" id="data">
                 </div>
             </div>
             <div class="form-group">
                 <label for="horario">Selecione um Horario</label>
                 <div class="d-flex" id="itens">
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="A" onclick="selecionarItem('A')">{{ hora }}:00</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="B" onclick="selecionarItem('B')">{{ hora }}:12</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="C" onclick="selecionarItem('C')">{{ hora }}:24</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="D" onclick="selecionarItem('D')">{{ hora }}:36</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="E" onclick="selecionarItem('E')">{{ hora }}:48</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:00" onclick="selecionarItem('{{ hora }}:00')">{{ hora }}:00</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:12" onclick="selecionarItem('{{ hora }}:12')">{{ hora }}:12</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:24" onclick="selecionarItem('{{ hora }}:24')">{{ hora }}:24</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:36" onclick="selecionarItem('{{ hora }}:36')">{{ hora }}:36</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:48" onclick="selecionarItem('{{ hora }}:48 ')">{{ hora }}:48</a>
                 </div>
-                <input type="hidden" name="itens_selecionados" id="itensSelecionados">
+                <input type="hidden" name="hora" id="hora">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -80,10 +89,8 @@
                 elemento.classList.add('active');
 
                 // Atualiza o valor do campo hidden com o item selecionado
-                document.getElementById('itensSelecionados').value = item;
-
-            // Atualiza o valor do campo hidden com os itens selecionados
-            document.getElementById('itensSelecionados').value = itensSelecionados.join(',');
+                document.getElementById('hora').value = item;
+                document.getElementById('data').value = item;
         }
     }
 </script>

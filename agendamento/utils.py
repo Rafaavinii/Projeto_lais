@@ -50,3 +50,29 @@ def obter_dias_quarta_a_sabado(ano, mes):
                     datas.append(data)
     
     return datas
+
+def horarios_disponiveis(estabelecimento, data, hora):
+    minutos = ['00', '12', '24', '36', '48']
+    
+    agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
+    horas = agendamentos.filter(data=data, hora=hora)
+
+    for hora in horas:
+        if hora.minuto in minutos:
+            minutos.remove(hora)
+    
+    return minutos
+
+def horario_por_idade(idade):
+    if idade >= 18 and idade <= 29:
+        hora = 13
+    elif idade >= 30 and idade <= 39:
+        hora = 14
+    elif idade >= 40 and idade <= 49:
+        hora = 15
+    elif idade >= 50 and idade <= 59:
+        hora = 16
+    else:
+        hora = 17
+
+    return hora

@@ -5,6 +5,7 @@ from estabelecimento.models import Estabalecimento
 class Agendamento(models.Model):
     data = models.DateField()
     hora = models.CharField(max_length=5)
+    minuto = models.CharField(max_length=2)
     dia = models.CharField(max_length=10)
     jah_expirou = models.BooleanField()
     candidato = models.ForeignKey(Candidato, on_delete=models.CASCADE)
