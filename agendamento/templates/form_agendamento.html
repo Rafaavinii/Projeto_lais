@@ -30,6 +30,16 @@
 {% block 'dashboard'%}
 
 <div class="container">
+    <a href="{% url 'pagina_inicial' %}">
+        <button type="button" class="btn custom-btn" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        </a> 
+    <div class="container m-3 text-center">
+        <div class="texto-principal">
+            <h3>Novo Agendamento</h3>
+        </div>
+    </div>
     <form method="post" action="{% url 'agendamento:agendamento' %}">
         {% csrf_token %}
         {% for mensagem in messages %}
@@ -42,31 +52,27 @@
             <div class="form-group">
                 <label for="estabelecimento">Selecione um Grupo de Atendimento:</label>
                 <select class="form-control" name="estabelecimento" id="estabelecimento">
+                    <option value="">Selecione um estabelecimento</option>
                     {% for estabelecimento in estabelecimentos %}
                         <option value="{{ estabelecimento.codigo }},{{ estabelecimento.nome }}">{{ estabelecimento.codigo }} - {{ estabelecimento.nome }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <div class="container">
-                    <div class="d-flex" id="itens">
-                        {% for data in datas %}
-                            <a href="#" class="list-group-item list-group-item-action rounded-pill data" data-item="{{ data }}" onclick="selecionarData('{{ data }}')">{{ data }}</a>
-                        {% endfor %}
+                <div class="container" id="div_data" style="display: none;">
+                    <label for="horario">Selecione uma Data</label>
+                    <div class="d-flex" id="datas_disponiveis">
                     </div>
-                    <input type="hidden" name="data" id="data">
+                    <input type="hidden" name="data" id="data_input">
                 </div>
             </div>
             <div class="form-group">
-                <label for="horario">Selecione um Horario</label>
-                <div class="d-flex" id="itens">
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:00" onclick="selecionarHora('{{ hora }}:00')">{{ hora }}:00</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:12" onclick="selecionarHora('{{ hora }}:12')">{{ hora }}:12</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:24" onclick="selecionarHora('{{ hora }}:24')">{{ hora }}:24</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:36" onclick="selecionarHora('{{ hora }}:36')">{{ hora }}:36</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:48" onclick="selecionarHora('{{ hora }}:48')">{{ hora }}:48</a>
+                <div id="div_hora" style="display: none;">
+                    <label for="horario">Selecione um Horario</label>
+                    <div class="d-flex" id="itens">
+                    </div>
+                    <input type="hidden" name="hora" id="hora">
                 </div>
-                <input type="hidden" name="hora" id="hora">
             </div>
             <div class="modal-footer">
                 <a href="{% url 'pagina_inicial'%}"><button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button></a>
@@ -75,6 +81,61 @@
     </form>
 </div>
 <script>
+
+    var estabelecimentoSelect = document.getElementById('estabelecimento');
+    var datasContainer = document.getElementById('datas_disponiveis');
+    var divData = document.getElementById('div_data')
+    var horasContainer = document.getElementById('itens');
+    var divHora = document.getElementById('div_hora')
+
+    estabelecimentoSelect.addEventListener('change', function () {
+        var estabelecimentoId = estabelecimentoSelect.value;
+        estabelecimentoId = estabelecimentoId.slice(0, 7)
+
+        divData.style.display = 'block';
+
+        fetch('/agendamento/obter-datas-disponiveis/' + estabelecimentoId+ '/')
+            .then(response => response.json())
+            .then(data => {
+                datasContainer.innerHTML = '';
+
+                data.datas_disponiveis.forEach(date => {
+                    var link = document.createElement('a');
+                    link.className = 'list-group-item list-group-item-action rounded-pill data';
+                    link.setAttribute('data-item', date);
+                    link.setAttribute('id', 'data')
+                    link.onclick = function () {
+                        selecionarData(date);
+                        HorariosDisponiveis(estabelecimentoId, date, {{ hora }});
+                    };
+                    link.textContent = date;
+                    datasContainer.appendChild(link);
+                });
+            });
+            
+    });
+
+    function HorariosDisponiveis(estabelecimento, data, hora) {
+        divHora.style.display = 'block';
+        fetch('/agendamento/obter-minutos-disponiveis/' + estabelecimento + '/' + data + '/' + hora + '/')
+            .then(response => response.json())
+            .then(data => {
+                horasContainer.innerHTML = '';
+
+                data.minutos_disponiveis.forEach(minuto => {
+                    var hora = document.createElement('a');
+                    hora.className = 'list-group-item list-group-item-action rounded-pill hora';
+                    hora.setAttribute('data-item', {{ hora }} + ':'  + minuto);
+                    hora.setAttribute('id', 'hora')
+                    hora.onclick = function () {
+                        selecionarHora({{ hora }} + ':'  + minuto);
+                    };
+                    hora.textContent = {{ hora }} + ':'  + minuto;
+                    horasContainer.appendChild(hora);
+                });
+            });
+    }
+
 
     function selecionarHora(item) {
         var elemento = document.querySelector('.hora[data-item="' + item + '"]');
@@ -104,7 +165,7 @@
                 elemento.classList.add('active');
 
                 // Atualiza o valor do campo hidden com o item selecionado
-                document.getElementById('data').value = item;
+                document.getElementById('data_input').value = item;
         }
     }
 </script>

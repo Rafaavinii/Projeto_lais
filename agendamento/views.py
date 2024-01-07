@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from .models import Agendamento
 from candidato.models import Candidato
@@ -18,8 +19,6 @@ def agendamento_view(request):
 
         datas = disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
         hora = horario_por_idade(idade)
-
-        print(horarios_disponiveis(1, '2024-01-17', '13'))
     
         return render(request, 'form_agendamento.html', {
             'estabelecimentos': estabelecimentos, 
@@ -61,6 +60,20 @@ def agendamento_view(request):
             messages.error(request, 'Data ou dia da semana inválido. Por favor, escolha uma dia entre quarta-feira e sábado.')
 
         return redirect('pagina_inicial')
+
+def obter_datas_disponiveis_view(request, estabelecimento):
+    estab = Estabalecimento.objects.get(codigo=estabelecimento)
+    datas_disponiveis = disponibilidade_estabelecimento(estab.id)
+
+    response_data = {'datas_disponiveis': datas_disponiveis}
+    return JsonResponse(response_data)
+
+def obter_minutos_disponiveis_view(request, estabelecimento, data, hora):
+    estab = Estabalecimento.objects.get(codigo=estabelecimento).id
+    minutos = minutos_disponiveis(estab, data, hora)
+
+    response_data = {'minutos_disponiveis': minutos}
+    return JsonResponse(response_data)
 
 
 

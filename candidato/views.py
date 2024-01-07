@@ -98,16 +98,5 @@ def candidato_autenticado_view(request):
             'agendamentos_pagina': agendamentos_pagina,
             'ordem': ordem,
         }
-        
-
-        # for i in range(5):
-        #     Agendamento.objects.create(
-        #             data = '2024-01-05',
-        #             hora = '16',
-        #             dia = 'Quarta-feira',
-        #             jah_expirou = True,
-        #             candidato_id = 14,
-        #             estabelecimento_id = 2
-        #     )
 
         return render(request, 'pagina_inicial.html', context)

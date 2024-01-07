@@ -15,13 +15,12 @@ def agendamento_por_vez(usuario):
 def disponibilidade_estabelecimento(estabelecimento):
     estabelecimentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
     datas_iguais = estabelecimentos.values('data', 'hora').annotate(total=Count('data'))
-    indisponiveis = {'data': [], 'hora':[]}
+    indisponiveis = []
 
     for agendamento in datas_iguais:
         if agendamento['total'] >= 5:
-            indisponiveis['hora'].append(agendamento['hora'])
-    
-    indisponiveis['data'].append(agendamento['data'])
+            print(agendamento['data'])
+            indisponiveis.append(agendamento['data'])
 
     ano_atual = datetime.now().year
     mes_atual = datetime.now().month
@@ -29,7 +28,7 @@ def disponibilidade_estabelecimento(estabelecimento):
     datas = obter_dias_quarta_a_sabado(ano_atual, mes_atual)
     datas += obter_dias_quarta_a_sabado(ano_atual, mes_seguinte)
     
-    for data in indisponiveis['data']:
+    for data in indisponiveis:
         data = str(data)
         if data in datas:
             datas.remove(data)
@@ -63,7 +62,7 @@ def obter_dias_quarta_a_sabado(ano, mes):
     
     return datas
 
-def horarios_disponiveis(estabelecimento, data, hora):
+def minutos_disponiveis(estabelecimento, data, hora):
     minutos = ['00', '12', '24', '36', '48']
     
     agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
