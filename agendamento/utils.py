@@ -3,6 +3,8 @@ import calendar
 from agendamento.models import Agendamento
 from django.db.models import Count
 
+from projeto_lais.validators import validar_data_agendamento
+
 def agendamento_por_vez(usuario):
     agendamento = Agendamento.objects.filter(candidato_id=usuario.id).last()
     if not agendamento or agendamento.jah_expirou == True:
@@ -21,7 +23,11 @@ def disponibilidade_estabelecimento(estabelecimento):
     
     indisponiveis['data'].append(agendamento['data'])
 
-    datas = obter_dias_quarta_a_sabado(2024, 1)
+    ano_atual = datetime.now().year
+    mes_atual = datetime.now().month
+    mes_seguinte = mes_atual + 1
+    datas = obter_dias_quarta_a_sabado(ano_atual, mes_atual)
+    datas += obter_dias_quarta_a_sabado(ano_atual, mes_seguinte)
     
     for data in indisponiveis['data']:
         data = str(data)
@@ -35,6 +41,12 @@ def obter_dia_da_semana(data):
     dia_da_semana = data_formatada.weekday()
     return dia_da_semana
 
+def obter_dia_da_semana_nome(data):
+    dia = ['Segunda-Feira', 'Terça-Feira', ' Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sabádo', 'Domingo']
+    data_formatada = datetime.strptime(data, '%Y-%m-%d')
+    dia_da_semana = data_formatada.weekday()
+    return dia[dia_da_semana]
+
 def obter_dias_quarta_a_sabado(ano, mes):
     # Retorna uma matriz de listas onde cada lista representa uma semana do mês
     semanas = calendar.monthcalendar(ano, mes)
@@ -46,7 +58,7 @@ def obter_dias_quarta_a_sabado(ano, mes):
             # Se o dia estiver dentro do mês, imprima a data
             if dia != 0:
                 data = f'{ano}-{mes:02d}-{dia:02d}'
-                if not obter_dia_da_semana(data) in [0, 1, 6]:
+                if obter_dia_da_semana(data) not in [0, 1, 6] and validar_data_agendamento(data):
                     datas.append(data)
     
     return datas
@@ -59,7 +71,7 @@ def horarios_disponiveis(estabelecimento, data, hora):
 
     for hora in horas:
         if hora.minuto in minutos:
-            minutos.remove(hora)
+            minutos.remove(hora.minuto)
     
     return minutos
 

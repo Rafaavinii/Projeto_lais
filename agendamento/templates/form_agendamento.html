@@ -5,7 +5,7 @@
 {% block 'head' %}
 <style>
     .list-group-item.active {
-        border: 2px solid green!important;
+        border: 2px solid var(--differential-color)!important;
         background-color: white;
         color: black;
     }
@@ -51,7 +51,7 @@
                 <div class="container">
                     <div class="d-flex" id="itens">
                         {% for data in datas %}
-                            <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ data }}" onclick="selecionarItem('{{ data }}')">{{ data }}</a>
+                            <a href="#" class="list-group-item list-group-item-action rounded-pill data" data-item="{{ data }}" onclick="selecionarData('{{ data }}')">{{ data }}</a>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="data" id="data">
@@ -60,28 +60,27 @@
             <div class="form-group">
                 <label for="horario">Selecione um Horario</label>
                 <div class="d-flex" id="itens">
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:00" onclick="selecionarItem('{{ hora }}:00')">{{ hora }}:00</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:12" onclick="selecionarItem('{{ hora }}:12')">{{ hora }}:12</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:24" onclick="selecionarItem('{{ hora }}:24')">{{ hora }}:24</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:36" onclick="selecionarItem('{{ hora }}:36')">{{ hora }}:36</a>
-                    <a href="#" class="list-group-item list-group-item-action rounded-pill" data-item="{{ hora }}:48" onclick="selecionarItem('{{ hora }}:48 ')">{{ hora }}:48</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:00" onclick="selecionarHora('{{ hora }}:00')">{{ hora }}:00</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:12" onclick="selecionarHora('{{ hora }}:12')">{{ hora }}:12</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:24" onclick="selecionarHora('{{ hora }}:24')">{{ hora }}:24</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:36" onclick="selecionarHora('{{ hora }}:36')">{{ hora }}:36</a>
+                    <a href="#" class="list-group-item list-group-item-action rounded-pill hora" data-item="{{ hora }}:48" onclick="selecionarHora('{{ hora }}:48')">{{ hora }}:48</a>
                 </div>
                 <input type="hidden" name="hora" id="hora">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <a href="{% url 'pagina_inicial'%}"><button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button></a>
                 <button type="submit" class="btn custom-btn">Agendar</button>
             </div>
     </form>
 </div>
 <script>
-    var itensSelecionados = [];
 
-    function selecionarItem(item) {
-        var elemento = document.querySelector('.list-group-item[data-item="' + item + '"]');
+    function selecionarHora(item) {
+        var elemento = document.querySelector('.hora[data-item="' + item + '"]');
         if (elemento) {
             // Desmarca todos os itens
-            document.querySelectorAll('.list-group-item').forEach(function(item) {
+            document.querySelectorAll('.hora').forEach(function(item) {
                 item.classList.remove('active');
                 });
 
@@ -90,6 +89,21 @@
 
                 // Atualiza o valor do campo hidden com o item selecionado
                 document.getElementById('hora').value = item;
+        }
+    }
+
+    function selecionarData(item) {
+        var elemento = document.querySelector('.data[data-item="' + item + '"]');
+        if (elemento) {
+            // Desmarca todos os itens
+            document.querySelectorAll('.data').forEach(function(item) {
+                item.classList.remove('active');
+                });
+
+                // Marca apenas o item clicado
+                elemento.classList.add('active');
+
+                // Atualiza o valor do campo hidden com o item selecionado
                 document.getElementById('data').value = item;
         }
     }
