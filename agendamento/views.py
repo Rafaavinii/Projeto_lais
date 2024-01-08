@@ -70,6 +70,7 @@ def obter_datas_disponiveis_view(request, estabelecimento):
 
 def obter_minutos_disponiveis_view(request, estabelecimento, data, hora):
     estab = Estabalecimento.objects.get(codigo=estabelecimento).id
+                                 
     minutos = minutos_disponiveis(estab, data, hora)
 
     response_data = {'minutos_disponiveis': minutos}

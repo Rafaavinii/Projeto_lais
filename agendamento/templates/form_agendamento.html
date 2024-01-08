@@ -61,7 +61,7 @@
             <div class="form-group">
                 <div class="container" id="div_data" style="display: none;">
                     <label for="horario">Selecione uma Data</label>
-                    <div class="d-flex" id="datas_disponiveis">
+                    <div class="d-flex flex-wrap" id="datas_disponiveis">
                     </div>
                     <input type="hidden" name="data" id="data_input">
                 </div>
@@ -71,7 +71,7 @@
                     <label for="horario">Selecione um Horario</label>
                     <div class="d-flex" id="itens">
                     </div>
-                    <input type="hidden" name="hora" id="hora">
+                    <input type="hidden" name="hora" id="hora_input">
                 </div>
             </div>
             <div class="modal-footer">
@@ -101,7 +101,7 @@
 
                 data.datas_disponiveis.forEach(date => {
                     var link = document.createElement('a');
-                    link.className = 'list-group-item list-group-item-action rounded-pill data';
+                    link.className = 'list-group-item list-group-item-action rounded-pill col-md-3 data';
                     link.setAttribute('data-item', date);
                     link.setAttribute('id', 'data')
                     link.onclick = function () {
@@ -149,7 +149,7 @@
                 elemento.classList.add('active');
 
                 // Atualiza o valor do campo hidden com o item selecionado
-                document.getElementById('hora').value = item;
+                document.getElementById('hora_input').value = item;
         }
     }
 

@@ -14,7 +14,6 @@ def administrador_dashboard_view(request):
 def administrador_estabelecimento_view(request):
     estabalecimentos = Estabalecimento.objects.all()
     filtro = request.GET.get('filtro')
-    print(filtro)
 
     if filtro == 'codigo':
         estabalecimentos = estabalecimentos.order_by('codigo')
@@ -27,8 +26,6 @@ def administrador_estabelecimento_view(request):
                 'codigo': estabalecimento.codigo
             }
         )
-    
-    print(lista_estabelecimento)
     
     context = {'estabelecimentos': lista_estabelecimento, 'filtro': filtro}
 

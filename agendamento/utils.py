@@ -19,7 +19,6 @@ def disponibilidade_estabelecimento(estabelecimento):
 
     for agendamento in datas_iguais:
         if agendamento['total'] >= 5:
-            print(agendamento['data'])
             indisponiveis.append(agendamento['data'])
 
     ano_atual = datetime.now().year
