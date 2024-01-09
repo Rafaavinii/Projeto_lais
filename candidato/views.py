@@ -46,7 +46,7 @@ def candidato_view(request):
 
 
         #salvando candidato no banco
-        Candidato.objects.create_candidato(
+        Candidato.objects.create_user(
             nome_completo = nome,
             username=cpf,
             cpf=cpf,

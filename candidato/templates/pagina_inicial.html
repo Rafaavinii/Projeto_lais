@@ -15,7 +15,11 @@
     {{ dados_usuario.cpf }}
 {% endblock %}
 {% block 'apto' %}
-    {{ dados_usuario.apto }}
+    {% if dados_usuario.apto %} 
+        Sim 
+    {% else %}
+        Não
+    {% endif %}
 {% endblock %}
 
 
@@ -25,7 +29,7 @@
     <div class="col">
         <h1 class="text-center texto-principal">AGENDAMENTO</h1>
         <a href="{% url 'agendamento:agendamento' %}">
-        <button type="button" class="btn custom-btn" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn custom-btn" {% if not dados_usuario.apto %} disabled title="Você é não apto para agendamento." {% endif %}>
             <i class="fa fa-plus"></i>
         </button>
         </a>    

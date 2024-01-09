@@ -19,7 +19,11 @@ def agendamento_view(request):
 
         datas = disponibilidade_estabelecimento(Estabalecimento.objects.get(id=1))
         hora = horario_por_idade(idade)
-    
+
+        if not dados_usuario['apto']:
+            messages.error(request, 'Você não está apto para o agendamento do exame.')
+            return redirect('pagina_inicial')
+
         return render(request, 'form_agendamento.html', {
             'estabelecimentos': estabelecimentos, 
             'dados_usuario': dados_usuario, 
@@ -61,6 +65,7 @@ def agendamento_view(request):
 
         return redirect('pagina_inicial')
 
+#API
 def obter_datas_disponiveis_view(request, estabelecimento):
     estab = Estabalecimento.objects.get(codigo=estabelecimento)
     datas_disponiveis = disponibilidade_estabelecimento(estab.id)

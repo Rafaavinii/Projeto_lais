@@ -23,7 +23,11 @@
     {{ dados_usuario.cpf }}
 {% endblock %}
 {% block 'apto' %}
-    {{ dados_usuario.apto }}
+    {% if dados_usuario.apto %} 
+        Sim 
+    {% else %}
+        Não
+    {% endif %}
 {% endblock %}
 
 
@@ -108,7 +112,7 @@
                         selecionarData(date);
                         HorariosDisponiveis(estabelecimentoId, date, {{ hora }});
                     };
-                    link.textContent = date;
+                    link.textContent = converterData(date);
                     datasContainer.appendChild(link);
                 });
             });
@@ -167,6 +171,16 @@
                 // Atualiza o valor do campo hidden com o item selecionado
                 document.getElementById('data_input').value = item;
         }
+    }
+
+    function converterData(dataNoFormatoOriginal) {
+        // Dividir a data usando o caractere '-' como delimitador
+        var partesData = dataNoFormatoOriginal.split('-');
+
+        // Inverter a ordem das partes da data
+        var dataFormatada = partesData.reverse().join('-');
+
+        return dataFormatada;
     }
 </script>
 {% endblock %}
