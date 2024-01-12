@@ -45,4 +45,12 @@ def gerar_candidato():
         print(f'Gerando candidatos... {round((i/10)*29, 2 )}%', end="\r")
     
     return candidatos
+
+
+dic = {}
+
+for i in range(10):
+    dic[f'{i}'] = []
+
+print(dic)
         

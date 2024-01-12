@@ -11,20 +11,18 @@
         <div class="titulo-dashboard">
             <h1>Dashboard</h1>
             <div class="opcoes">
-                <a class="opcao" href="#">opcao1</a>
-                <a class="opcao" href="#">opcao2</a>
+                <a class="Barras" onclick="toggleDiv('barrasDiv', 'pizzaDiv')">Barras</a>
+                <a class="Pizza" onclick="toggleDiv('pizzaDiv', 'barrasDiv')">Pizza</a>
             </div>
         </div>
     </div>
  
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Agendamento por Estabelecimento</h5>
-                <canvas id="barChart"></canvas>
-            </div>
-        </div>
-        <div class="card">
+    <div class="container" id="barrasDiv">
+        <h5 class="title mb-5">Agendamento por Estabelecimento</h5>
+        <canvas id="barChart"></canvas>
+    
+    </div>
+        <div id="pizzaDiv" class="card" style="display: none;">
             <div class="col" style="width: 30%; margin: auto;">
                 <canvas id="pieChart"></canvas>
             </div>
@@ -33,18 +31,19 @@
     </div>
 
 <script>
-    function encurtarNome(nome, comprimentoMaximo) {
-        if (nome.length > comprimentoMaximo) {
-            return nome.substring(0, comprimentoMaximo) + '...';
-            }
-            return nome;
+
+    function toggleDiv(showDivId, hideDivId) {
+        var showDiv = document.getElementById(showDivId);
+        var hideDiv = document.getElementById(hideDivId);
+
+        if (showDiv.style.display === 'none') {
+            showDiv.style.display = 'block';
+            hideDiv.style.display = 'none';
+        }
     }
 
-
-    var barNome = {{ label|safe }};
-
-    
-    var barQuantidade = {{ quantidade|safe }};
+    var barNome = {{ barra.nomes|safe }};
+    var barQuantidade = {{ barra.quantidade|safe }};
 
     const ctx = document.getElementById('barChart');
     
@@ -58,12 +57,12 @@
             borderWidth: 1,
             barPercentage: 0.6, // Porcentagem da largura da barra em relação ao espaço disponível
             categoryPercentage: 1,
-            backgroundColor: '#06d6a0',
+            backgroundColor: '#06d6d0',
 
         }]
         },
         options: {
-            indexAxis: 'y',
+            indexAxis: 'x',
             responsive: true,
             scales: {
                 y: {
@@ -75,14 +74,15 @@
         }
     });
 
-
+    var pizzaAptos = {{ pizza.aptos|safe }};
+    var pizzaInaptos = {{ pizza.inaptos|safe }};
     const pieChartCanvas = document.getElementById('pieChart')
     new Chart(pieChartCanvas, {
         type: 'pie',
         data: {
             labels: ['Aptos', 'Inaptos'],
             datasets: [{
-                data: [{{ aptos }}, {{ inaptos }}],
+                data: [pizzaAptos, pizzaInaptos],
                 backgroundColor: ['#06d6a0', '#e63946']
             }]
         }
