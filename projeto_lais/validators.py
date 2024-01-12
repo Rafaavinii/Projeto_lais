@@ -63,8 +63,8 @@ def validar_cpf(cpf):
         segundo_digito = 11 - resto
     else:
         segundo_digito = 0 
-
-    if primeiro_digito != int(cpf[9]):
+    
+    if segundo_digito != int(cpf[10]):
         return 'CPF inválido.'
     
     if Candidato.objects.filter(cpf=cpf).exists():

@@ -22,7 +22,7 @@ Para instalação do software é necessário:
 
 2. Instale as dependências:
 ```
-> pip install -r requisitos.txt
+> pip install -r requirements.txt
 ```
 
 3. Execute as migrações:

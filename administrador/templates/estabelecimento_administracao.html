@@ -3,26 +3,32 @@
 
 {% block 'dashboard'%}
 <div class="container">
-    <div class="table-responsive-sm" style="height: 100vh; overflow-y: auto;">
+    <div class="container" >
+        <div class="input-group mb-3">
+            <input type="text" class="form-control mt-2" placeholder="Nome do Estabelecimento ou Código CNES" id="buscar_estabelecimento">
+          </div>
+    </div>
+    <div class="table-responsive-sm" style="height: 90vh; overflow-y: auto;">
         <table class="table table-hover">
-            {% if not filtro or filtro == 'nome' %}
+            <!-- {% if not filtro or filtro == 'nome' %}
             <a href="?filtro=codigo">
-                Filtro
+                <i class="fa fa-sort-asc">Codigo</i>
             </a>
             {% endif %}
             {% if filtro == 'codigo' %}
             <a href="?filtro=nome">
-                Filtro
+                <i class="fa fa-sort-asc">Nome</i>
             </a>
-            {% endif %}
+            {% endif %} -->
         <thead>
             <tr>
             <th scope="col">#</th>
             <th scope="col">Estabelecimento De Saúde</th>
             <th scope="col">Código CNES</th>
+            <!-- <i class="fa fa-sort-asc"></i> -->
             </tr>
         </thead>
-        <tbody>
+        <tbody id="resultado">
             {% for estabelecimento in estabelecimentos %}
             <tr>
             <th scope="row">{{ forloop.counter }}</th>
@@ -34,4 +40,42 @@
         </table>
     </div>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function (){
+        var InputBuscar = document.getElementById('buscar_estabelecimento')
+        var listaResultado = document.getElementById('resultado')
+
+        InputBuscar.addEventListener('input', function() {
+            var term = InputBuscar.value
+
+            fetch('/admin/buscar_estabelecimento/?term=' + term)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    listaResultado.innerHTML = ''
+
+                    data.estabelecimentos.forEach((estabelecimento, index) => {
+                        var row = listaResultado.insertRow()
+                        var ind = row.insertCell()
+                        var nome = row.insertCell()
+                        var codigo = row.insertCell()
+
+                        ind.textContent = index + 1;
+                        nome.textContent = estabelecimento.nome
+                        codigo.textContent = estabelecimento.codigo
+                    })
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+            })
+    })
+
+</script>
 {% endblock %}

@@ -7,30 +7,39 @@ from projeto_lais.validators import validar_data_agendamento
 
 def agendamento_por_vez(usuario):
     agendamento = Agendamento.objects.filter(candidato_id=usuario.id).last()
+    #Garante o agendamento único
     if not agendamento or agendamento.jah_expirou == True:
         return True
     
     return False
 
 def disponibilidade_estabelecimento(estabelecimento):
-    estabelecimentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
+    try:
+        estabelecimentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
+    except Exception as e:
+        # Tratamento de exceção, se necessário
+        print(f"Erro ao buscar agendamentos: {e}")
+        return []
+    
+    #retorna a quantidade de vezes que data e hora são iguais e adiciona na coluna 'total'
     datas_iguais = estabelecimentos.values('data', 'hora').annotate(total=Count('data'))
-    indisponiveis = []
 
+    datas_indisponiveis = []
     for agendamento in datas_iguais:
+        #adiciona na lista de datas indisponivei
         if agendamento['total'] >= 5:
-            indisponiveis.append(agendamento['data'])
+            datas_indisponiveis.append(agendamento['data'])
 
     ano_atual = datetime.now().year
     mes_atual = datetime.now().month
+    #Range de agendamento de 2 meses
     mes_seguinte = mes_atual + 1
-    datas = obter_dias_quarta_a_sabado(ano_atual, mes_atual)
-    datas += obter_dias_quarta_a_sabado(ano_atual, mes_seguinte)
+    datas = obter_dias_quarta_a_sabado(ano_atual, mes_atual) + obter_dias_quarta_a_sabado(ano_atual, mes_seguinte)
     
-    for data in indisponiveis:
-        data = str(data)
+    for data in datas_indisponiveis:
+        str_data = str(data)
         if data in datas:
-            datas.remove(data)
+            datas.remove(str_data)
 
     return datas
 
@@ -64,10 +73,16 @@ def obter_dias_quarta_a_sabado(ano, mes):
 def minutos_disponiveis(estabelecimento, data, hora):
     minutos = ['00', '12', '24', '36', '48']
     
-    agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
-    horas = agendamentos.filter(data=data, hora=hora)
+    try:
+        agendamentos = Agendamento.objects.filter(estabelecimento_id=estabelecimento)
+        horas = agendamentos.filter(data=data, hora=hora)
+    except Exception as e:
+        # Tratamento de exceção, se necessário
+        print(f"Erro ao buscar agendamentos: {e}")
+        return []
 
     for hora in horas:
+        #verifica se já existe agendamento naquela data e hora
         if hora.minuto in minutos:
             minutos.remove(hora.minuto)
     

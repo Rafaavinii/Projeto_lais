@@ -7,6 +7,8 @@ from estabelecimento.models import Estabalecimento
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import JsonResponse
+from django.db.models import Q
 
 from projeto_lais.consumirXML import XMLparser
 
@@ -80,3 +82,11 @@ def administrador_estabelecimento_view(request):
 def obter_estabelecimentos():
     xml_url = 'https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml'
     return XMLparser(xml_url, 'estabelecimento', ['no_fantasia', 'co_cnes'])
+
+def buscar_estabelecimento(request):
+    if 'term' in request.GET:
+        term = request.GET['term']
+        estabelecimentos = Estabalecimento.objects.filter(Q(nome__icontains=term) | Q(codigo__icontains=term))
+        lista_estabelecimente = [{'nome': estabalecimento.nome, 'codigo': estabalecimento.codigo} for estabalecimento in estabelecimentos]
+        return JsonResponse({'estabelecimentos': lista_estabelecimente})
+    return JsonResponse({})

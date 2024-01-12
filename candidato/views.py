@@ -57,8 +57,9 @@ def candidato_view(request):
         )
 
         if verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
-            messages.error(request, 'Você não está apto a participar.')
-        messages.success(request, 'Candidato cadastrado com sucesso!')
+            messages.error(request, 'Você não está apto para participar.')
+        else:
+            messages.success(request, 'Candidato cadastrado com sucesso!')
         return redirect('login_candidato')
 
 def login_candidato_view(request):
