@@ -180,7 +180,21 @@
         // Inverter a ordem das partes da data
         var dataFormatada = partesData.reverse().join('-');
 
-        return dataFormatada;
+
+
+        return dataFormatada + ' ' + obterDiaDaSemana(dataNoFormatoOriginal);
+    }
+
+    function obterDiaDaSemana(dataString) {
+        var data = new Date(dataString);
+
+        var diasDaSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
+
+        var numeroDiaSemana = data.getDay();
+
+        var nomeDiaSemana = diasDaSemana[numeroDiaSemana];
+
+        return nomeDiaSemana;
     }
 </script>
 {% endblock %}

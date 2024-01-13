@@ -34,7 +34,7 @@ def candidato_view(request):
                 'grupos': obter_grupos(),
                 'mensagens_erro': mensagens_erro,
                 'campos_erro': campos_erro,
-                'campos_data': { 
+                'campos_data': {  #manter campos
                     "nome": nome, 
                     "cpf": cpf,
                     "data_nascimento":  data_nascimento,
@@ -59,7 +59,7 @@ def candidato_view(request):
         if verificar_apto(teve_covid, data_nascimento, grupo_atendimento):
             messages.error(request, 'Você não está apto para participar.')
         else:
-            messages.success(request, 'Candidato cadastrado com sucesso!')
+            messages.success(request, 'Candidato apto e cadastrado com sucesso!')
         return redirect('login_candidato')
 
 def login_candidato_view(request):

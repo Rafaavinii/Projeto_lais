@@ -13,12 +13,14 @@ def obter_grupos():
 
 def obter_dados_usuario(usuario):
     data_nascimento = usuario.data_nascimento
+    data_datetime = datetime.strptime(str(data_nascimento), "%Y-%m-%d")
+    data_br = data_datetime.strftime("%d/%m/%Y")
     idade = calcular_idade(data_nascimento)
     apto = verificar_apto(usuario.teve_covid, data_nascimento, usuario.grupo_atendimento)
 
     return {
         'nome': usuario.nome_completo,
-        'data_nascimento': data_nascimento,
+        'data_nascimento': data_br,
         'idade': idade,
         'cpf': usuario.cpf,
         'apto': apto,
