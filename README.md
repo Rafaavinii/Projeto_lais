@@ -19,19 +19,32 @@ Para instalação do software é necessário:
 ```
 > git clone https://github.com/Rafaavinii/Projeto_lais.git
 ```
+2. Instale a virtual env:
+```
+> python -m venv ven
+```
+3. Ative a venv:
+Windows:
+```
+> venv\Scripts\activate
+```
+Linux:
+```
+source nome_da_sua_venv/bin/activate
+```
 
-2. Instale as dependências:
+4. Instale as dependências:
 ```
 > pip install -r requirements.txt
 ```
 
-3. Execute as migrações:
+5. Execute as migrações:
 ```
 > python manage.py makemigrations
 > python manage.py migrate
 ```
 
-4. Execute o servidor:
+6. Execute o servidor:
 ```
 > python manage.py runserver
 ```
