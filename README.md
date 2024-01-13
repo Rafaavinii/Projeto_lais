@@ -24,11 +24,11 @@ Para instalação do software é necessário:
 > python -m venv ven
 ```
 3. Ative a venv:
-Windows:
+3.1 Windows:
 ```
 > venv\Scripts\activate
 ```
-Linux:
+3.2 Linux:
 ```
 source nome_da_sua_venv/bin/activate
 ```
